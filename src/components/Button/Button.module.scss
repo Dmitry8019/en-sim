@@ -1,0 +1,54 @@
+.button,
+.disabledButton {
+    fill: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.1s, border 0.1s;
+}
+
+.button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    fill-opacity: 0.8;
+}
+
+.disabledButton {
+    opacity: 0.5;
+    fill: transparent;
+}
+
+.clear {
+    padding: 0;
+    border: 0;
+    background: none;
+    outline: none;
+}
+
+.clickDown {
+    background-color: rgb(128 128 128 / 30%);
+}
+
+.clickUp {
+    border: 2px solid rgb(128 128 128 / 20%);
+}
+
+.outline {
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    background: none;
+    border-radius: 5px;
+}
+
+.outline_red {
+    padding: 10px;
+    border: 1px solid var(--button-red);
+    color: var(--button-red);
+    background: none;
+    border-radius: 5px;
+}
+
+.fullWidth {
+    width: 100%;
+}
