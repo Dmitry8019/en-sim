@@ -1,0 +1,15 @@
+.appLink {
+    color: var(--primary-color);
+}
+
+.primary {
+    text-decoration: none;
+}
+
+.secondary {
+    text-decoration-color: var(--text-decoration-color);
+
+    &:hover {
+        text-decoration-color: var(--text-decoration-color-hover);
+    }
+}
