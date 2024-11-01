@@ -1,0 +1,17 @@
+@mixin scrollbar() {
+    @media (hover: hover) and (pointer: fine) {
+        &::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            // background: var(--bg-navbar);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--bg-navbar);
+            border-radius: 20px;
+        }
+    }
+}
