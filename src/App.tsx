@@ -1,9 +1,13 @@
+import './styles/index.scss';
+
 function App() {
     //
 
     return (
         <>
-            <div>English</div>
+            <div className='app app_dark_theme'>
+                <div>English</div>
+            </div>
         </>
     );
 }

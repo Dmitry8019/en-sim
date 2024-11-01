@@ -1,0 +1,23 @@
+@import "reset.scss";
+@import "variables/global.scss";
+@import "themes/dark.scss";
+@import "mixins.scss";
+
+.app {
+    background: var(--bg-color);
+    color: var(--primary-color);
+    min-height: 100vh;
+
+    .content-wrapper {
+        display: flex;
+
+        .content-page {
+            overflow: auto;
+            height: calc(100vh - var(--navbar-height));
+            width: 100%;
+            padding: 15px 25px;
+
+            @include scrollbar;
+        }
+    }
+}
