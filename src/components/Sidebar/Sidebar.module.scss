@@ -1,0 +1,44 @@
+.sidebar {
+    height: calc(100vh - var(--navbar-height));
+    width: var(--sidebar-width);
+    background: var(--bg-sidebar);
+    position: relative;
+    transition: width 0.3s, left 0.3s;
+}
+
+.collapsed {
+    width: var(--sidebar-width-collapsed);
+}
+
+@media (max-width: 710px) {
+    .sidebar {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        left: 0;
+    }
+    .collapsed {
+        width: 0;
+        left: -20px;
+    }
+}
+
+.blockDev {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.dev {
+    padding: 15px;
+    font-size: 12px;
+    color: gray;
+    transition: opacity 0.3s, transform 0.3s;
+    min-width: calc(var(--sidebar-width) - 70px);
+    max-width: calc(var(--sidebar-width) - 70px);
+}
+.hideText {
+    opacity: 0;
+    transform: scaleY(0);
+}
