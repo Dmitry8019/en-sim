@@ -1,0 +1,44 @@
+.link {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    overflow: hidden;
+
+    &:hover {
+        background: var(--bg-sidebar-hover);
+    }
+
+    svg {
+        fill: var(--primary-color);
+        margin-left: 5px;
+    }
+}
+
+.linkActive {
+    background: linear-gradient(to right, var(--bg-sidebar-active) 5px, var(--bg-sidebar) 5px 5px);
+
+    &:hover {
+        background: linear-gradient(
+            to right,
+            var(--bg-sidebar-active) 5px,
+            var(--bg-sidebar-hover) 5px 5px
+        );
+    }
+}
+
+.wrapperSvg {
+    display: flex;
+    align-items: center;
+}
+
+.text {
+    margin-left: 20px;
+    transition: opacity 0.3s, transform 0.3s;
+    min-width: calc(var(--sidebar-width) - 70px);
+    max-width: calc(var(--sidebar-width) - 70px);
+}
+
+.hideText {
+    opacity: 0;
+    transform: scaleY(0);
+}

@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 import { useEvent } from '../../hooks/useEvent';
 import { SidebarSwitchButton } from '../SidebarSwitchButton/SidebarSwitchButton';
 import { LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY } from '../../const/localStorage';
+import { sidebarItemsList } from './sidebarItemList';
+import { SidebarItem } from './SidebarItem';
 
 import styles from './Sidebar.module.scss';
 
@@ -27,6 +29,14 @@ export const Sidebar = (props: SidebarProps) => {
         useState<SidebarSwitcher>(defaultSidebarSwitcher);
     const isBurger = sidebarSwitchStatus === SidebarSwitcher.SHOW;
 
+    const itemsList = useMemo(
+        () =>
+            sidebarItemsList.map((item) => (
+                <SidebarItem item={item} collapsed={isBurger} key={item.path} />
+            )),
+        [isBurger],
+    );
+
     const sidebarSwitchHandler = useEvent(() => {
         const newStatus =
             sidebarSwitchStatus === SidebarSwitcher.SHOW
@@ -43,6 +53,7 @@ export const Sidebar = (props: SidebarProps) => {
                 className={classNames(styles.sidebar, { [styles.collapsed]: !isBurger }, className)}
             >
                 <div className={styles.blockDev}>
+                    <div>{itemsList}</div>
                     <div className={classNames(styles.dev, { [styles.hideText]: !isBurger })}>
                         &#169; 2025 D.A.Dadychyn
                     </div>
