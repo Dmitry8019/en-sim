@@ -1,0 +1,16 @@
+$outlineColor: rgb(60, 60, 60);
+$outlineBorder: 4px;
+
+.text {
+    font-size: 15px;
+    color: rgb(177, 177, 177);
+    font-weight: bold;
+    text-shadow: -0 -1px $outlineBorder $outlineColor, 0 -1px $outlineBorder $outlineColor,
+        -0 1px $outlineBorder $outlineColor, 0 1px $outlineBorder $outlineColor,
+        -1px -0 $outlineBorder $outlineColor, 1px -0 $outlineBorder $outlineColor,
+        -1px 0 $outlineBorder $outlineColor, 1px 0 $outlineBorder $outlineColor,
+        -1px -1px $outlineBorder $outlineColor, 1px -1px $outlineBorder $outlineColor,
+        -1px 1px $outlineBorder $outlineColor, 1px 1px $outlineBorder $outlineColor,
+        -1px -1px $outlineBorder $outlineColor, 1px -1px $outlineBorder $outlineColor,
+        -1px 1px $outlineBorder $outlineColor, 1px 1px $outlineBorder $outlineColor;
+}

@@ -1,3 +1,4 @@
+import { Navbar } from './components/Navbar/Navbar';
 import './styles/index.scss';
 
 function App() {
@@ -6,7 +7,7 @@ function App() {
     return (
         <>
             <div className='app app_dark_theme'>
-                <div>English</div>
+                <Navbar />
             </div>
         </>
     );
