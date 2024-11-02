@@ -1,5 +1,6 @@
 import { AppRoutesProps } from '../ui/AppRouter';
 import { AppRoutes, getRouteAbout, getRouteMain, getRouteTrainer } from '../../const/router';
+import { TrainerPage } from '../../components/TrainerPage/TrainerPage';
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.MAIN]: {
@@ -12,7 +13,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     },
     [AppRoutes.TRAINER]: {
         path: getRouteTrainer(),
-        element: <div>Trainer</div>,
+        element: <TrainerPage />,
         authOnly: true,
     },
     [AppRoutes.NOT_FOUND]: {

@@ -3,6 +3,7 @@ import { Sidebar } from './components/Sidebar/Sidebar';
 import AppRouter from './router/ui/AppRouter';
 
 import './styles/index.scss';
+import './index.css';
 
 function App() {
     //

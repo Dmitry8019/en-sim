@@ -1,0 +1,29 @@
+.levelSelectionPanel {
+    background: #003c85;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 8px;
+    gap: 10px;
+
+    .button {
+        padding: 5px 5px;
+        color: white;
+        border-radius: 5px;
+        width: 100%;
+        font-weight: bold;
+
+        &:hover {
+            background: #004ead;
+        }
+    }
+
+    .active {
+        background: orange;
+        color: black;
+
+        &:hover {
+            background: orange;
+        }
+    }
+}
