@@ -24,6 +24,7 @@ export const LevelSelectionPanel = (props: LevelSelectionPanelProps) => {
                             [styles.active]: item === selectedLevel,
                         })}
                         onClick={() => onSelectedLevel(item)}
+                        key={item}
                     >
                         {item}
                     </Button>
