@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Page } from '../Page/Page';
 import { LevelSelectionPanel } from '../LevelSelectionPanel/LevelSelectionPanel';
 import { OptionSelectionPanel } from '../OptionSelectionPanel/OptionSelectionPanel';
+import { useGetLessonsQuery } from './lessons.query';
 
 import styles from './TrainerPage.module.scss';
 
@@ -61,6 +62,8 @@ export const TrainerPage = (props: TrainerPageProps) => {
     const [selectedLevel, setSelectedLevel] = useState(levels[0]);
     const [selectedOption, setSelectedOption] = useState(options[0]);
 
+    const { lessons = [] } = useGetLessonsQuery(selectedLevel);
+
     return (
         <Page>
             <div className={classNames(styles.trainerPage, className)}>
@@ -76,6 +79,9 @@ export const TrainerPage = (props: TrainerPageProps) => {
                     className={styles.panel}
                 />
             </div>
+            {lessons.map((item) => {
+                return <div>{item.name}</div>;
+            })}
         </Page>
     );
 };

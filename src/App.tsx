@@ -7,6 +7,7 @@ import './index.css';
 
 function App() {
     //
+    localStorage.setItem('user', '"eyLgleoxlevn4490sofg.dl95sPPlkjvkd.g30984lijvuSDbvdlwfEF"');
 
     return (
         <div className='app app_dark_theme'>
