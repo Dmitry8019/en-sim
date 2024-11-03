@@ -5,6 +5,7 @@ import { Page } from '../Page/Page';
 import { LevelSelectionPanel } from '../LevelSelectionPanel/LevelSelectionPanel';
 import { OptionSelectionPanel } from '../OptionSelectionPanel/OptionSelectionPanel';
 import { useGetLessonsQuery } from './lessons.query';
+import { Button, ThemeButton } from '../Button/Button';
 
 import styles from './TrainerPage.module.scss';
 
@@ -61,15 +62,19 @@ export const TrainerPage = (props: TrainerPageProps) => {
     const { className } = props;
     const [selectedLevel, setSelectedLevel] = useState(levels[0]);
     const [selectedOption, setSelectedOption] = useState(options[0]);
-
+    const [selectedLesson, setSelectedLesson] = useState(1);
     const { lessons = [] } = useGetLessonsQuery(selectedLevel);
+    console.log(selectedLesson);
 
     return (
         <Page>
             <div className={classNames(styles.trainerPage, className)}>
                 <LevelSelectionPanel
                     selectedLevel={selectedLevel}
-                    onSelectedLevel={setSelectedLevel}
+                    onSelectedLevel={(level) => {
+                        setSelectedLevel(level);
+                        setSelectedLesson(1);
+                    }}
                     levels={levels}
                 />
                 <OptionSelectionPanel
@@ -78,10 +83,23 @@ export const TrainerPage = (props: TrainerPageProps) => {
                     options={options}
                     className={styles.panel}
                 />
+                {lessons.map((item) => {
+                    const id = Number(item.id);
+                    return (
+                        <Button
+                            className={classNames(styles.list, {
+                                [styles.active]: id === selectedLesson,
+                            })}
+                            theme={ThemeButton.CLEAR}
+                            key={id}
+                            onClick={() => setSelectedLesson(id)}
+                        >
+                            <div>{id + '.'}</div>
+                            <div>{item.name}</div>
+                        </Button>
+                    );
+                })}
             </div>
-            {lessons.map((item) => {
-                return <div>{item.name}</div>;
-            })}
         </Page>
     );
 };
