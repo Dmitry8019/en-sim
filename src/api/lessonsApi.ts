@@ -1,7 +1,7 @@
 import { $api } from './api';
 
 export interface LessonsStateType {
-    id: string;
+    id: number;
     name: string;
 }
 

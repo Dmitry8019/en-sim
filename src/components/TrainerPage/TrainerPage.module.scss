@@ -1,3 +1,26 @@
-.panel {
-    margin-top: 10px;
+.trainerPage {
+    .panel {
+        margin: 10px 0;
+    }
+
+    .list {
+        width: 100%;
+        padding: 8px;
+        background: var(--bg-navbar);
+        margin: 4px 0;
+        border-radius: 5px;
+        color: var(--primary-color);
+        justify-content: flex-start;
+        align-items: flex-start;
+        text-align: left;
+
+        div:first-child {
+            min-width: 30px;
+            opacity: 0.3;
+        }
+    }
+
+    .active {
+        background: var(--bg-tab-active);
+    }
 }
