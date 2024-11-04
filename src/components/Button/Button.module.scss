@@ -5,12 +5,23 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.1s, border 0.1s;
+
+    &:focus {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    &:focus-visible {
+        outline: 1px solid var(--primary-color);
+        outline-offset: -1px;
+    }
 }
 
-.button:hover {
-    cursor: pointer;
-    opacity: 0.8;
-    fill-opacity: 0.8;
+@media (hover: hover) and (pointer: fine) {
+    .button:hover {
+        cursor: pointer;
+        opacity: 0.8;
+        fill-opacity: 0.8;
+    }
 }
 
 .disabledButton {
