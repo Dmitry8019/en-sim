@@ -4,8 +4,19 @@
     padding: 15px 10px;
     overflow: hidden;
 
-    &:hover {
-        background: var(--bg-sidebar-hover);
+    &:focus {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    &:focus-visible {
+        outline: 1px solid var(--primary-color);
+        outline-offset: -1px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background: var(--bg-sidebar-hover);
+        }
     }
 
     svg {
@@ -17,12 +28,14 @@
 .linkActive {
     background: linear-gradient(to right, var(--bg-sidebar-active) 5px, var(--bg-sidebar) 5px 5px);
 
-    &:hover {
-        background: linear-gradient(
-            to right,
-            var(--bg-sidebar-active) 5px,
-            var(--bg-sidebar-hover) 5px 5px
-        );
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background: linear-gradient(
+                to right,
+                var(--bg-sidebar-active) 5px,
+                var(--bg-sidebar-hover) 5px 5px
+            );
+        }
     }
 }
 

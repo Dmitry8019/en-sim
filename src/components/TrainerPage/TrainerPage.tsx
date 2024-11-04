@@ -64,7 +64,6 @@ export const TrainerPage = (props: TrainerPageProps) => {
     const [selectedOption, setSelectedOption] = useState(options[0]);
     const [selectedLesson, setSelectedLesson] = useState(1);
     const { lessons = [] } = useGetLessonsQuery(selectedLevel);
-    console.log(selectedLesson);
 
     return (
         <Page>
@@ -99,6 +98,9 @@ export const TrainerPage = (props: TrainerPageProps) => {
                         </Button>
                     );
                 })}
+                <Button theme={ThemeButton.CLEAR} className={styles.start}>
+                    Start
+                </Button>
             </div>
         </Page>
     );
