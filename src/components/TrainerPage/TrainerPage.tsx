@@ -1,58 +1,17 @@
 import { useState } from 'react';
 import classNames from 'classnames';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Page } from '../Page/Page';
 import { LevelSelectionPanel } from '../LevelSelectionPanel/LevelSelectionPanel';
 import { OptionSelectionPanel } from '../OptionSelectionPanel/OptionSelectionPanel';
 import { useGetLessonsQuery } from './lessons.query';
 import { Button, ThemeButton } from '../Button/Button';
+import { Loader } from '../Loader/Loader';
+import { levels, options } from './initialData';
+import { useScroll } from '../../hooks/useScroll';
 
 import styles from './TrainerPage.module.scss';
-
-export interface Option {
-    sound: boolean;
-    en: boolean;
-    ru: boolean;
-}
-
-const levels = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1'];
-const options: Option[] = [
-    {
-        sound: true,
-        en: false,
-        ru: false,
-    },
-    {
-        sound: false,
-        en: true,
-        ru: false,
-    },
-    {
-        sound: false,
-        en: false,
-        ru: true,
-    },
-    {
-        sound: true,
-        en: false,
-        ru: true,
-    },
-    {
-        sound: true,
-        en: true,
-        ru: false,
-    },
-    {
-        sound: false,
-        en: true,
-        ru: true,
-    },
-    {
-        sound: true,
-        en: true,
-        ru: true,
-    },
-];
 
 interface TrainerPageProps {
     className?: string;
@@ -60,13 +19,27 @@ interface TrainerPageProps {
 
 export const TrainerPage = (props: TrainerPageProps) => {
     const { className } = props;
-    const [selectedLevel, setSelectedLevel] = useState(levels[0]);
-    const [selectedOption, setSelectedOption] = useState(options[0]);
-    const [selectedLesson, setSelectedLesson] = useState(1);
-    const { lessons = [] } = useGetLessonsQuery(selectedLevel);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const ids = location.state?.id.split('_') ?? null;
+    const [initialLevel, initialLesson] = ids ? [ids[0], Number(ids[1])] : [levels[0], 1];
+    const initialOption =
+        options.find((item) => item.id === location.state?.selectedOption.id) ?? options[0];
+
+    const [selectedLevel, setSelectedLevel] = useState(initialLevel);
+    const [selectedOption, setSelectedOption] = useState(initialOption);
+    const [selectedLesson, setSelectedLesson] = useState(initialLesson);
+
+    const { lessons = [], isLessonsLoading } = useGetLessonsQuery(selectedLevel);
+
+    const { onScrollPosition, getScrollPosition, initialScrollPosition } = useScroll(
+        lessons.length,
+    );
 
     return (
-        <Page>
+        <Page onScrollPosition={onScrollPosition} initialPositionScroll={initialScrollPosition}>
             <div className={classNames(styles.trainerPage, className)}>
                 <LevelSelectionPanel
                     selectedLevel={selectedLevel}
@@ -82,6 +55,11 @@ export const TrainerPage = (props: TrainerPageProps) => {
                     options={options}
                     className={styles.panel}
                 />
+                {isLessonsLoading && (
+                    <div className={styles.loader}>
+                        <Loader />
+                    </div>
+                )}
                 {lessons.map((item) => {
                     const id = Number(item.id);
                     return (
@@ -98,7 +76,15 @@ export const TrainerPage = (props: TrainerPageProps) => {
                         </Button>
                     );
                 })}
-                <Button theme={ThemeButton.CLEAR} className={styles.start}>
+                <Button
+                    theme={ThemeButton.CLEAR}
+                    className={styles.start}
+                    onClick={() => {
+                        navigate(`${selectedLevel}_${selectedLesson}`, {
+                            state: { selectedOption, scrollPosition: getScrollPosition() },
+                        });
+                    }}
+                >
                     Start
                 </Button>
             </div>

@@ -1,6 +1,7 @@
+import { Outlet } from 'react-router-dom';
+
 import { Navbar } from './components/Navbar/Navbar';
 import { Sidebar } from './components/Sidebar/Sidebar';
-import AppRouter from './router/ui/AppRouter';
 
 import './styles/index.scss';
 import './index.css';
@@ -14,7 +15,7 @@ function App() {
             <Navbar />
             <div className='content-page'>
                 <Sidebar />
-                <AppRouter />
+                <Outlet />
             </div>
         </div>
     );

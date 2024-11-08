@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 
 import { Button, ThemeButton } from '../Button/Button';
-import { Option } from '../TrainerPage/TrainerPage';
 import { Icon } from '../Icon/Icon';
 import Sound from '../../assets/icons/volume.svg?react';
+import { Option } from '../TrainerPage/initialData';
 
 import styles from './OptionSelectionPanel.module.scss';
 
