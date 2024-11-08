@@ -42,4 +42,12 @@
             right: 15px;
         }
     }
+
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 55.4vh;
+        width: 100%;
+    }
 }

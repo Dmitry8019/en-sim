@@ -1,23 +1,34 @@
-import { AppRoutesProps } from '../ui/AppRouter';
-import { AppRoutes, getRouteAbout, getRouteMain, getRouteTrainer } from '../../const/router';
+import App from '../../App';
 import { TrainerPage } from '../../components/TrainerPage/TrainerPage';
+import { Trainer } from '../../components/Trainer/Trainer';
+import {
+    getRouteAbout,
+    getRouteMain,
+    getRouteTrainer,
+    getRouteTrainerId,
+} from '../../const/router';
 
-export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
-    [AppRoutes.MAIN]: {
+export const routeConfig = [
+    {
         path: getRouteMain(),
-        element: <div>Home</div>,
+        element: <App />,
+        children: [
+            {
+                path: getRouteMain(),
+                element: <div>Home</div>,
+            },
+            {
+                path: getRouteAbout(),
+                element: <div>About</div>,
+            },
+            {
+                path: getRouteTrainer(),
+                element: <TrainerPage />,
+            },
+            {
+                path: getRouteTrainerId(),
+                element: <Trainer />,
+            },
+        ],
     },
-    [AppRoutes.ABOUT]: {
-        path: getRouteAbout(),
-        element: <div>About</div>,
-    },
-    [AppRoutes.TRAINER]: {
-        path: getRouteTrainer(),
-        element: <TrainerPage />,
-        authOnly: true,
-    },
-    [AppRoutes.NOT_FOUND]: {
-        path: '*',
-        element: <div>Not Found</div>,
-    },
-};
+];

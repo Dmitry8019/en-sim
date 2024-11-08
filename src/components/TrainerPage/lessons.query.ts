@@ -7,7 +7,6 @@ export const useGetLessonsQuery = (level: string) => {
         data: lessons,
         isError: isLessonsError,
         isLoading: isLessonsLoading,
-        // remove: lessonsRemove,
     } = useQuery({
         queryKey: ['lessons', level],
         queryFn: () => {
@@ -22,6 +21,5 @@ export const useGetLessonsQuery = (level: string) => {
         lessons,
         isLessonsError,
         isLessonsLoading,
-        // lessonsRemove,
     };
 };
