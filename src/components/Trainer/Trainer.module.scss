@@ -1,0 +1,36 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    p {
+        opacity: 0.5;
+    }
+}
+
+.footer {
+    display: flex;
+    position: fixed;
+    bottom: 10px;
+    right: 23px;
+    gap: 10px;
+}
+
+.button {
+    background: var(--bg-tab);
+    padding: 5px 20px;
+    border-radius: 5px;
+    color: var(--primary-color);
+}
+
+@media (max-width: 710px) {
+    .footer {
+        right: 15px;
+    }
+}

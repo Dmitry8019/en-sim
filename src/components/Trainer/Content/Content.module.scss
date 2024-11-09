@@ -1,0 +1,51 @@
+@import "../../../styles/mixins.scss";
+
+.content {
+    background: var(--bg-navbar);
+    padding: 10px;
+    font-size: 24px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+
+    @include focusVisible;
+
+    p {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+}
+
+.marginBottom {
+    margin-bottom: 40px;
+}
+
+.hideText {
+    filter: blur(6px);
+    opacity: 0.3;
+}
+
+.element {
+    padding-bottom: 20px;
+}
+
+.button {
+    margin-left: auto;
+    margin-right: 0;
+
+    svg {
+        fill: var(--bg-sidebar);
+    }
+}
+
+.showCopy {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    background: var(--bg-sidebar);
+    padding: 5px 20px;
+    border-radius: 5px;
+    color: var(--primary-color);
+    font-size: 16px;
+}

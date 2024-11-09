@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 .button,
 .disabledButton {
     fill: var(--primary-color);
@@ -6,14 +8,7 @@
     justify-content: center;
     transition: background-color 0.1s, border 0.1s;
 
-    &:focus {
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    }
-
-    &:focus-visible {
-        outline: 1px solid var(--primary-color);
-        outline-offset: -1px;
-    }
+    @include focusVisible;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -45,7 +40,7 @@
 }
 
 .outline {
-    padding: 10px;
+    padding: 5px 20px;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
     background: none;
