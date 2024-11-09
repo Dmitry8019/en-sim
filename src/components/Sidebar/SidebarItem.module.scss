@@ -1,17 +1,12 @@
+@import "../../styles/mixins.scss";
+
 .link {
     display: flex;
     align-items: center;
     padding: 15px 10px;
     overflow: hidden;
 
-    &:focus {
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    }
-
-    &:focus-visible {
-        outline: 1px solid var(--primary-color);
-        outline-offset: -1px;
-    }
+    @include focusVisible;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {

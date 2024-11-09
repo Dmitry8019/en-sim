@@ -12,7 +12,6 @@ export const useGetLessonsQuery = (level: string) => {
         queryFn: () => {
             return lessonsApi.getAllLessons(level);
         },
-        enabled: true,
         retry: false,
         refetchOnWindowFocus: false,
     });

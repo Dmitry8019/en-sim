@@ -15,3 +15,14 @@
         }
     }
 }
+
+@mixin focusVisible() {
+    &:focus {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    &:focus-visible {
+        outline: 1px solid var(--primary-color);
+        outline-offset: -1px;
+    }
+}

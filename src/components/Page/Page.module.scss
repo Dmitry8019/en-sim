@@ -1,7 +1,12 @@
+@import "../../styles/mixins.scss";
+
 .page {
     flex-grow: 1;
     padding: 15px 15px 15px 15px;
     height: calc(100vh - var(--navbar-height));
     overflow-y: auto;
     scrollbar-gutter: stable;
+    position: relative;
+
+    @include scrollbar();
 }
