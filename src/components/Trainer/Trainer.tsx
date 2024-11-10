@@ -7,6 +7,7 @@ import { getRouteTrainer } from '../../const/router';
 import { Content } from './Content/Content';
 import { Loader } from '../Loader/Loader';
 import { useGetSentencesQuery } from './trainer.query';
+import { TouchPanel } from './TouchPanel';
 
 import styles from './Trainer.module.scss';
 
@@ -20,20 +21,20 @@ interface TrainerProps {
 
 export const Trainer = (props: TrainerProps) => {
     const { className } = props;
-    const [sentenceIndex, setSentenceIndex] = useState(0);
 
     const { id } = useParams<Params>();
     const { state } = useLocation();
     const navigate = useNavigate();
+
+    const [sentenceIndex, setSentenceIndex] = useState(0);
+    const [showEn, setShowEn] = useState<boolean>(state.selectedOption.en);
+    const [showRu, setShowRu] = useState<boolean>(state.selectedOption.ru);
+
     const [selectedLevel, selectedLesson] = id?.split('_') ?? ['A0, 1'];
 
     const { sentences = [], isSentencesLoading } = useGetSentencesQuery(
         `${selectedLevel}_${selectedLesson}`,
     );
-
-    if (isSentencesLoading) {
-        return <Loader />;
-    }
 
     const handleNext = () => {
         const newIndex = sentenceIndex + 1;
@@ -50,6 +51,11 @@ export const Trainer = (props: TrainerProps) => {
         }
         setSentenceIndex(newIndex);
     };
+
+    if (isSentencesLoading) {
+        return <Loader />;
+    }
+
     return (
         <Page className={className}>
             <div className={styles.wrapper}>
@@ -75,12 +81,14 @@ export const Trainer = (props: TrainerProps) => {
                 sentence={sentences[sentenceIndex].en}
                 transcription={sentences[sentenceIndex].transcription}
                 isShowText={state.selectedOption.en}
+                isTouchText={showEn}
                 isSound={state.selectedOption.sound}
             />
             <Content
                 lang='ru'
                 sentence={sentences[sentenceIndex].ru}
                 isShowText={state.selectedOption.ru}
+                isTouchText={showRu}
             />
             <div className={styles.footer}>
                 <Button onClick={handlePrev} theme={ThemeButton.CLEAR} className={styles.button}>
@@ -89,6 +97,12 @@ export const Trainer = (props: TrainerProps) => {
                 <Button onClick={handleNext} theme={ThemeButton.CLEAR} className={styles.button}>
                     Next
                 </Button>
+                <TouchPanel
+                    onNext={handleNext}
+                    onPrev={handlePrev}
+                    onShowEn={() => setShowEn(!showEn)}
+                    onShowRu={() => setShowRu(!showRu)}
+                />
             </div>
         </Page>
     );

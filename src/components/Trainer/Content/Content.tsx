@@ -1,4 +1,4 @@
-import { MouseEvent, useLayoutEffect, useState } from 'react';
+import { MouseEvent, useEffect, useLayoutEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { Button, ThemeButton } from '../../Button/Button';
@@ -14,10 +14,11 @@ interface ContentProps {
     transcription?: string;
     isSound?: boolean;
     lang: string;
+    isTouchText: boolean;
 }
 
 export const Content = (props: ContentProps) => {
-    const { className, sentence, transcription, isShowText, isSound, lang } = props;
+    const { className, sentence, transcription, isShowText, isSound, lang, isTouchText } = props;
     const [showText, setShowText] = useState(isShowText);
     const [isShowTitle, setIsShowTitle] = useState(false);
 
@@ -33,9 +34,12 @@ export const Content = (props: ContentProps) => {
         }
     }, [isShowText, isSound, sentence]);
 
+    useEffect(() => {
+        setShowText(isTouchText);
+    }, [isTouchText]);
+
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         const tagName = (e.target as HTMLDivElement).tagName;
-        console.log(tagName);
         if ((tagName === 'SPAN' && showText) || tagName === 'path' || tagName === 'svg') {
             return;
         }
@@ -76,7 +80,9 @@ export const Content = (props: ContentProps) => {
                     </span>
                 );
             })}
-            <p className={classNames({ [styles.hideText]: !showText })}>{transcription}</p>
+            <p className={classNames(styles.transcription, { [styles.hideText]: !showText })}>
+                {transcription}
+            </p>
 
             <Button
                 theme={ThemeButton.CLEAR}

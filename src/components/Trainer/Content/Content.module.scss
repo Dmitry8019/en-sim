@@ -3,7 +3,7 @@
 .content {
     background: var(--bg-navbar);
     padding: 10px;
-    font-size: 24px;
+    font-size: 22px;
     margin: 5px 0;
     border-radius: 5px;
     cursor: pointer;
@@ -24,6 +24,10 @@
 .hideText {
     filter: blur(6px);
     opacity: 0.3;
+}
+
+.transcription {
+    opacity: 0.7;
 }
 
 .element {
