@@ -22,6 +22,7 @@ export const TouchPanel = (props: TouchPanelProps) => {
     const [showTouch, setShowTouch] = useState(true);
 
     const handleStart = (e: TouchEvent) => {
+        e.preventDefault();
         const clientX = e.changedTouches[0].clientX;
         const clientY = e.changedTouches[0].clientY;
         startX = clientX;

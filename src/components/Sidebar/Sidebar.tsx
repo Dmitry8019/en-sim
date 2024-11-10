@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { useEvent } from '../../hooks/useEvent';
@@ -25,6 +26,8 @@ interface SidebarProps {
 export const Sidebar = (props: SidebarProps) => {
     const { className } = props;
 
+    const location = useLocation();
+
     const [sidebarSwitchStatus, setSidebarSwitchStatus] =
         useState<SidebarSwitcher>(defaultSidebarSwitcher);
     const isBurger = sidebarSwitchStatus === SidebarSwitcher.SHOW;
@@ -45,6 +48,12 @@ export const Sidebar = (props: SidebarProps) => {
         setSidebarSwitchStatus(newStatus);
         localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, newStatus);
     });
+
+    useEffect(() => {
+        const status = SidebarSwitcher.HIDE;
+        setSidebarSwitchStatus(status);
+        localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, status);
+    }, [location]);
 
     return (
         <>
