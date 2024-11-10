@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-import styles from './loader.module.scss';
+import styles from './Loader.module.scss';
 
 interface LoaderProps {
     className?: string;

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import classNames from 'classnames';
 import { LinkProps, NavLink } from 'react-router-dom';
 
-import styles from './appLink.module.scss';
+import styles from './AppLink.module.scss';
 
 export enum AppLinkTheme {
     PRIMARY = 'primary',

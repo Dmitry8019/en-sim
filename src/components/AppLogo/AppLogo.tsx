@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+
 import styles from './AppLogo.module.scss';
 
 interface AppNameProps {
