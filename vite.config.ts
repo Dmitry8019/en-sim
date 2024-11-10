@@ -5,7 +5,6 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
-    // plugins: [react(), svgr(), VitePWA({ registerType: 'autoUpdate' })],
     plugins: [
         react(),
         svgr(),
@@ -21,9 +20,16 @@ export default defineConfig({
                 theme_color: '#383838',
                 icons: [
                     {
-                        src: 'public/logo.svg',
-                        sizes: '32x32',
+                        src: 'public/web-app-manifest-192x192.png',
+                        sizes: '192x192',
                         type: 'image/png',
+                        purpose: 'maskable',
+                    },
+                    {
+                        src: 'public/web-app-manifest-512x512.png',
+                        sizes: '512x512',
+                        type: 'image/png',
+                        purpose: 'maskable',
                     },
                 ],
             },
