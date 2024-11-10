@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { ISidebarItem } from './sidebarItemList';
 import { AppLink, AppLinkTheme } from '../AppLink/AppLink';
 
-import styles from './sidebarItem.module.scss';
+import styles from './SidebarItem.module.scss';
 
 interface SidebarItemProps {
     item: ISidebarItem;
