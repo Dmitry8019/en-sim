@@ -1,0 +1,16 @@
+{
+    "name": "English Simulator",
+    "short_name": "ES",
+    "description": "English Simulator 2023",
+    "icons": [
+        {
+            "src": "public/logo.svg",
+            "sizes": "32x32",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "theme_color": "#383838",
+    "background_color": "#383838"
+}
