@@ -1,0 +1,16 @@
+.touchPanel {
+    position: fixed;
+    background: var(--bg-tab-active);
+    width: 94%;
+    height: 300px;
+    margin-left: 3%;
+    opacity: 0.1;
+    bottom: 10px;
+    left: 0;
+    z-index: -1;
+}
+
+.showTouch {
+    height: 40px;
+    padding: 10px;
+}
