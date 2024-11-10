@@ -8,6 +8,7 @@ import { Content } from './Content/Content';
 import { Loader } from '../Loader/Loader';
 import { useGetSentencesQuery } from './trainer.query';
 import { TouchPanel } from './TouchPanel';
+import { useKeyboardHandler } from './useKeyboardHandler';
 
 import styles from './Trainer.module.scss';
 
@@ -38,7 +39,7 @@ export const Trainer = (props: TrainerProps) => {
 
     const handleNext = () => {
         const newIndex = sentenceIndex + 1;
-        if (newIndex > sentences.length) {
+        if (newIndex >= sentences.length) {
             return;
         }
         setSentenceIndex(newIndex);
@@ -51,6 +52,13 @@ export const Trainer = (props: TrainerProps) => {
         }
         setSentenceIndex(newIndex);
     };
+
+    useKeyboardHandler(
+        handleNext,
+        handlePrev,
+        () => setShowEn(!showEn),
+        () => setShowRu(!showRu),
+    );
 
     if (isSentencesLoading) {
         return <Loader />;
