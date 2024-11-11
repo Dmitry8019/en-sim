@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useLayoutEffect, useState } from 'react';
+import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { Button, ThemeButton } from '../../Button/Button';
@@ -21,6 +21,7 @@ export const Content = (props: ContentProps) => {
     const { className, sentence, transcription, isShowText, isSound, lang, isTouchText } = props;
     const [showText, setShowText] = useState(isShowText);
     const [isShowTitle, setIsShowTitle] = useState(false);
+    const isFirstRender = useRef(true);
 
     const startPlaying = (text: string) => {
         console.log(text);
@@ -35,7 +36,11 @@ export const Content = (props: ContentProps) => {
     }, [isShowText, isSound, sentence]);
 
     useEffect(() => {
-        setShowText(isTouchText);
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        setShowText(!showText);
     }, [isTouchText]);
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {

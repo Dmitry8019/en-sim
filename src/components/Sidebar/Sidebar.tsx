@@ -51,8 +51,10 @@ export const Sidebar = (props: SidebarProps) => {
 
     useEffect(() => {
         const status = SidebarSwitcher.HIDE;
-        setSidebarSwitchStatus(status);
-        localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, status);
+        if (window.matchMedia('(max-width: 710px)').matches) {
+            setSidebarSwitchStatus(status);
+            localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, status);
+        }
     }, [location]);
 
     return (
