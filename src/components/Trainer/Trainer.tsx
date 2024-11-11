@@ -66,6 +66,14 @@ export const Trainer = (props: TrainerProps) => {
 
     return (
         <Page className={className}>
+            {window.matchMedia('(max-width: 710px)').matches && (
+                <TouchPanel
+                    onNext={handleNext}
+                    onPrev={handlePrev}
+                    onShowEn={() => setShowEn(!showEn)}
+                    onShowRu={() => setShowRu(!showRu)}
+                />
+            )}
             <div className={styles.wrapper}>
                 <div className={styles.header}>
                     <Button
@@ -105,12 +113,6 @@ export const Trainer = (props: TrainerProps) => {
                 <Button onClick={handleNext} theme={ThemeButton.CLEAR} className={styles.button}>
                     Next
                 </Button>
-                <TouchPanel
-                    onNext={handleNext}
-                    onPrev={handlePrev}
-                    onShowEn={() => setShowEn(!showEn)}
-                    onShowRu={() => setShowRu(!showRu)}
-                />
             </div>
         </Page>
     );
