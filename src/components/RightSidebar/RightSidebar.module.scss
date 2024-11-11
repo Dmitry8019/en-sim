@@ -1,0 +1,27 @@
+$widthPanel: 400px;
+
+.panel {
+    background: var(--bg-sidebar);
+    position: fixed;
+    width: $widthPanel;
+    height: 100%;
+    padding: 15px;
+    right: 0;
+    top: var(--navbar-height);
+    z-index: 2;
+    transition: right 0.2s;
+}
+
+.hidePanel {
+    right: -$widthPanel;
+}
+
+@media (max-width: 710px) {
+    .panel {
+        width: 100%;
+    }
+
+    .hidePanel {
+        right: -100%;
+    }
+}
