@@ -21,25 +21,56 @@ const isLocalKey = (key: string) => {
     }
 };
 
+// const getVoices = () => {
+//     return new Promise<SpeechSynthesisVoice[]>((resolve) => {
+//         let voices = speechSynthesis.getVoices();
+//         if (voices.length) {
+//             resolve(voices);
+//             return;
+//         }
+//         speechSynthesis.onvoiceschanged = () => {
+//             voices = speechSynthesis.getVoices();
+//             resolve(voices);
+//         };
+
+//         // Добавляем задержку в 100 миллисекунд
+//         setTimeout(() => {
+//             voices = speechSynthesis.getVoices();
+//             if (voices.length) {
+//                 resolve(voices);
+//             }
+//         }, 100);
+//     });
+// };
 const getVoices = () => {
-    return new Promise<SpeechSynthesisVoice[]>((resolve) => {
+    return new Promise<SpeechSynthesisVoice[]>((resolve, reject) => {
         let voices = speechSynthesis.getVoices();
         if (voices.length) {
             resolve(voices);
             return;
         }
-        speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-            resolve(voices);
-        };
 
-        // Добавляем задержку в 100 миллисекунд
-        setTimeout(() => {
+        let attempts = 0;
+        const maxAttempts = 10;
+        const retryInterval = setInterval(() => {
             voices = speechSynthesis.getVoices();
+            attempts++;
             if (voices.length) {
+                clearInterval(retryInterval);
                 resolve(voices);
+            } else if (attempts >= maxAttempts) {
+                clearInterval(retryInterval);
+                reject(new Error('Unable to load voices after multiple attempts'));
             }
         }, 100);
+
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            if (voices.length) {
+                clearInterval(retryInterval);
+                resolve(voices);
+            }
+        };
     });
 };
 
