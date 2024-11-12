@@ -9,6 +9,8 @@ import { Loader } from '../Loader/Loader';
 import { useGetSentencesQuery } from './trainer.query';
 import { TouchPanel } from './TouchPanel';
 import { useKeyboardHandler } from './useKeyboardHandler';
+import VolumeIcon from '../../assets/icons/volume.svg?react';
+import { Icon } from '../Icon/Icon';
 
 import styles from './Trainer.module.scss';
 
@@ -76,17 +78,6 @@ export const Trainer = (props: TrainerProps) => {
             )}
             <div className={styles.wrapper}>
                 <div className={styles.header}>
-                    <Button
-                        onClick={() => {
-                            navigate(getRouteTrainer(), {
-                                state: { id, ...state },
-                            });
-                        }}
-                        theme={ThemeButton.CLEAR}
-                        className={styles.button}
-                    >
-                        Exit
-                    </Button>
                     <p>{`Level: ${selectedLevel}`}</p>
                     <p>{`Lesson: ${selectedLesson}`}</p>
                 </div>
@@ -107,12 +98,44 @@ export const Trainer = (props: TrainerProps) => {
                 isTouchText={showRu}
             />
             <div className={styles.footer}>
-                <Button onClick={handlePrev} theme={ThemeButton.CLEAR} className={styles.button}>
-                    Prev
+                <Button
+                    onClick={() => {
+                        navigate(getRouteTrainer(), {
+                            state: { id, ...state },
+                        });
+                    }}
+                    theme={ThemeButton.CLEAR}
+                    className={styles.button}
+                >
+                    Exit
                 </Button>
-                <Button onClick={handleNext} theme={ThemeButton.CLEAR} className={styles.button}>
-                    Next
+                <Button
+                    onClick={() => {
+                        //
+                    }}
+                    theme={ThemeButton.CLEAR}
+                    className={styles.button}
+                >
+                    <Icon Svg={VolumeIcon} />
                 </Button>
+                {!window.matchMedia('(max-width: 710px)').matches && (
+                    <>
+                        <Button
+                            onClick={handlePrev}
+                            theme={ThemeButton.CLEAR}
+                            className={styles.button}
+                        >
+                            Prev
+                        </Button>
+                        <Button
+                            onClick={handleNext}
+                            theme={ThemeButton.CLEAR}
+                            className={styles.button}
+                        >
+                            Next
+                        </Button>
+                    </>
+                )}
             </div>
         </Page>
     );

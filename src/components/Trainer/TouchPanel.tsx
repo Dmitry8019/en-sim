@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 import styles from './TouchPanel.module.scss';
@@ -19,7 +19,6 @@ interface TouchPanelProps {
 export const TouchPanel = (props: TouchPanelProps) => {
     const { className, onNext, onPrev, onShowEn, onShowRu } = props;
     const elementRef = useRef<HTMLDivElement>(null);
-    const [showTouch, setShowTouch] = useState(true);
 
     const handleStart = (e: TouchEvent) => {
         e.preventDefault();
@@ -37,7 +36,7 @@ export const TouchPanel = (props: TouchPanelProps) => {
         const direction = wayX > wayY;
 
         if (startX === endX && startY === endY) {
-            return setShowTouch(!showTouch);
+            // озвучка текста
         }
 
         if (direction && startX < endX) {
@@ -53,7 +52,7 @@ export const TouchPanel = (props: TouchPanelProps) => {
         if (!direction && startY < endY) {
             onShowRu();
         }
-    }, [onNext, onPrev, onShowEn, onShowRu, showTouch]);
+    }, [onNext, onPrev, onShowEn, onShowRu]);
 
     const handleMove = (e: TouchEvent) => {
         endX = e.changedTouches[0].clientX;
@@ -76,12 +75,5 @@ export const TouchPanel = (props: TouchPanelProps) => {
         };
     }, [handleEnd]);
 
-    return (
-        <div
-            className={classNames(styles.touchPanel, className, { [styles.showTouch]: !showTouch })}
-            ref={elementRef}
-        >
-            {!showTouch && 'Touch Panel'}
-        </div>
-    );
+    return <div className={classNames(styles.touchPanel, className)} ref={elementRef} />;
 };
