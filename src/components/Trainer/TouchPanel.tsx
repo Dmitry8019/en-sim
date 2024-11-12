@@ -14,10 +14,11 @@ interface TouchPanelProps {
     onNext: VoidFunction;
     onShowEn: VoidFunction;
     onShowRu: VoidFunction;
+    onPlay: VoidFunction;
 }
 
 export const TouchPanel = (props: TouchPanelProps) => {
-    const { className, onNext, onPrev, onShowEn, onShowRu } = props;
+    const { className, onNext, onPrev, onShowEn, onShowRu, onPlay } = props;
     const elementRef = useRef<HTMLDivElement>(null);
 
     const handleStart = (e: TouchEvent) => {
@@ -36,7 +37,7 @@ export const TouchPanel = (props: TouchPanelProps) => {
         const direction = wayX > wayY;
 
         if (startX === endX && startY === endY) {
-            // озвучка текста
+            onPlay();
         }
 
         if (direction && startX < endX) {
@@ -52,7 +53,7 @@ export const TouchPanel = (props: TouchPanelProps) => {
         if (!direction && startY < endY) {
             onShowRu();
         }
-    }, [onNext, onPrev, onShowEn, onShowRu]);
+    }, [onNext, onPlay, onPrev, onShowEn, onShowRu]);
 
     const handleMove = (e: TouchEvent) => {
         endX = e.changedTouches[0].clientX;

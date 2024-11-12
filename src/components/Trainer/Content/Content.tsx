@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 import { Button, ThemeButton } from '../../Button/Button';
@@ -15,25 +15,37 @@ interface ContentProps {
     isSound?: boolean;
     lang: string;
     isTouchText: boolean;
+    onPlaySound: (text: string, voiceType: string) => void;
 }
 
 export const Content = (props: ContentProps) => {
-    const { className, sentence, transcription, isShowText, isSound, lang, isTouchText } = props;
+    const {
+        className,
+        sentence,
+        transcription,
+        isShowText,
+        isSound,
+        lang,
+        isTouchText,
+        onPlaySound,
+    } = props;
     const [showText, setShowText] = useState(isShowText);
     const [isShowTitle, setIsShowTitle] = useState(false);
     const isFirstRender = useRef(true);
 
-    const startPlaying = (text: string) => {
-        console.log(text);
-        // playing(text, lang)
-    };
+    const startPlaying = useCallback(
+        (text: string) => {
+            onPlaySound(text, lang);
+        },
+        [lang],
+    );
 
     useLayoutEffect(() => {
         setShowText(isShowText);
         if (isSound) {
             startPlaying(sentence);
         }
-    }, [isShowText, isSound, sentence]);
+    }, [isShowText, isSound, sentence, startPlaying]);
 
     useEffect(() => {
         if (isFirstRender.current) {

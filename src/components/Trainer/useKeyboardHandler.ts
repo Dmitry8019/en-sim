@@ -5,15 +5,17 @@ export const useKeyboardHandler = (
     onPrev: VoidFunction,
     onShowEn: VoidFunction,
     onShowRu: VoidFunction,
+    onPlay: VoidFunction,
 ) => {
     const processKeyboardUp = useCallback(
         ({ code }: KeyboardEvent) => {
             if (code === 'Numpad8') return onShowEn();
             if (code === 'Numpad2') return onShowRu();
             if (code === 'Numpad6') return onNext();
-            if (code === 'Numpad4') onPrev();
+            if (code === 'Numpad4') return onPrev();
+            if (code === 'Numpad5') onPlay();
         },
-        [onNext, onPrev, onShowEn, onShowRu],
+        [onNext, onPrev, onShowEn, onShowRu, onPlay],
     );
 
     useEffect(() => {
