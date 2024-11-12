@@ -21,6 +21,20 @@ const isLocalKey = (key: string) => {
     }
 };
 
+const getVoices = () => {
+    return new Promise<SpeechSynthesisVoice[]>((resolve) => {
+        let voices = speechSynthesis.getVoices();
+        if (voices.length) {
+            resolve(voices);
+            return;
+        }
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            resolve(voices);
+        };
+    });
+};
+
 class Store implements StoreType {
     voicesOrigin: SpeechSynthesisVoice[] = [];
     voicesEn: SpeechSynthesisVoice[] = [];
@@ -50,29 +64,28 @@ class Store implements StoreType {
     private setVoicesRu(voicesRu: SpeechSynthesisVoice[]) {
         this.voicesRu = voicesRu;
     }
-    initVoices() {
-        let voices = speechSynthesis.getVoices();
-        speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-            const voicesEn = voices.filter((item) => item.lang.split('-')[0] === 'en');
-            const voicesRu = voices.filter((item) => item.lang.split('-')[0] === 'ru');
-            this.setVoicesOrigin(voices);
-            this.setVoicesEn(voicesEn);
-            this.setVoicesRu(voicesRu);
-        };
+    async initVoices() {
+        const voices = await getVoices();
+        const voicesEn = voices.filter((item) => item.lang.split('-')[0] === 'en');
+        const voicesRu = voices.filter((item) => item.lang.split('-')[0] === 'ru');
+        this.setVoicesOrigin(voices);
+        this.setVoicesEn(voicesEn);
+        this.setVoicesRu(voicesRu);
     }
     playSound(text: string, voiceType: string, onStart: VoidFunction, onEnd: VoidFunction) {
         const selectedVoice =
             voiceType === 'en'
                 ? this.voicesEn[this.voiceEnIndex]
                 : this.voicesRu[this.voiceRuIndex];
-        const voice = this.voicesOrigin.find((item) => item.name === selectedVoice.name);
+        const voice =
+            this.voicesOrigin.find((item) => item.name === selectedVoice.name) ??
+            this.voicesOrigin[0];
 
         speechSynthesis.cancel();
 
         this.utterance.text = text;
-        this.utterance.voice = voice ?? this.voicesOrigin[0];
-        this.utterance.lang = voiceType === 'en' ? 'en-GB' : 'ru-RU';
+        this.utterance.voice = voice;
+        this.utterance.lang = voice.lang;
         speechSynthesis.speak(this.utterance);
 
         this.utterance.onstart = () => {
