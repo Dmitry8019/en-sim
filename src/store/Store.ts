@@ -44,7 +44,7 @@ const isLocalKey = (key: string) => {
 // };
 const getVoices = () => {
     return new Promise<SpeechSynthesisVoice[]>((resolve, reject) => {
-        let voices = speechSynthesis.getVoices();
+        let voices = window.speechSynthesis.getVoices();
         if (voices.length) {
             resolve(voices);
             return;
@@ -53,7 +53,7 @@ const getVoices = () => {
         let attempts = 0;
         const maxAttempts = 10;
         const retryInterval = setInterval(() => {
-            voices = speechSynthesis.getVoices();
+            voices = window.speechSynthesis.getVoices();
             attempts++;
             if (voices.length) {
                 clearInterval(retryInterval);
@@ -64,8 +64,8 @@ const getVoices = () => {
             }
         }, 100);
 
-        speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
             if (voices.length) {
                 clearInterval(retryInterval);
                 resolve(voices);
@@ -112,6 +112,8 @@ class Store implements StoreType {
         this.setVoicesRu(voicesRu);
     }
     playSound(text: string, voiceType: string, onStart: VoidFunction, onEnd: VoidFunction) {
+        speechSynthesis.cancel();
+
         const selectedVoice =
             voiceType === 'en'
                 ? this.voicesEn[this.voiceEnIndex]
@@ -119,8 +121,6 @@ class Store implements StoreType {
         const voice =
             this.voicesOrigin.find((item) => item.name === selectedVoice.name) ??
             this.voicesOrigin[0];
-
-        speechSynthesis.cancel();
 
         this.utterance.text = text;
         this.utterance.voice = voice;
