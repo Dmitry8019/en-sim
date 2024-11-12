@@ -123,8 +123,11 @@ class Store implements StoreType {
             this.voicesOrigin[0];
 
         this.utterance.text = text;
-        this.utterance.voice = voice;
-        this.utterance.lang = voice.lang;
+
+        if (voice?.lang) {
+            this.utterance.voice = voice;
+            this.utterance.lang = voice.lang;
+        }
         speechSynthesis.speak(this.utterance);
 
         this.utterance.onstart = () => {
