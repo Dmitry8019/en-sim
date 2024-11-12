@@ -80,7 +80,7 @@ class Store implements StoreType {
     voicesRu: SpeechSynthesisVoice[] = [];
     voiceEnIndex = isLocalKey('EnIndex');
     voiceRuIndex = isLocalKey('RuIndex');
-    utterance: SpeechSynthesisUtterance;
+    utterance: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
 
     constructor() {
         this.utterance = new SpeechSynthesisUtterance();
