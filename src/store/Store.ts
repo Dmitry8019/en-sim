@@ -32,6 +32,14 @@ const getVoices = () => {
             voices = speechSynthesis.getVoices();
             resolve(voices);
         };
+
+        // Добавляем задержку в 100 миллисекунд
+        setTimeout(() => {
+            voices = speechSynthesis.getVoices();
+            if (voices.length) {
+                resolve(voices);
+            }
+        }, 100);
     });
 };
 
