@@ -4,9 +4,12 @@ type StoreType = {
     setVoiceEnIndex: (index: number) => void;
     setVoiceRuIndex: (index: number) => void;
 
+    voicesOrigin: SpeechSynthesisVoice[];
     voicesEn: SpeechSynthesisVoice[];
     voicesRu: SpeechSynthesisVoice[];
     initVoices: VoidFunction;
+
+    utterance: SpeechSynthesisUtterance;
 };
 
 const isLocalKey = (key: string) => {
@@ -19,10 +22,16 @@ const isLocalKey = (key: string) => {
 };
 
 class Store implements StoreType {
+    voicesOrigin: SpeechSynthesisVoice[] = [];
     voicesEn: SpeechSynthesisVoice[] = [];
     voicesRu: SpeechSynthesisVoice[] = [];
     voiceEnIndex = isLocalKey('EnIndex');
     voiceRuIndex = isLocalKey('RuIndex');
+    utterance: SpeechSynthesisUtterance;
+
+    constructor() {
+        this.utterance = new SpeechSynthesisUtterance();
+    }
 
     setVoiceEnIndex(index: number) {
         this.voiceEnIndex = index;
@@ -31,6 +40,9 @@ class Store implements StoreType {
     setVoiceRuIndex(index: number) {
         this.voiceRuIndex = index;
         localStorage.setItem('RuIndex', String(index));
+    }
+    private setVoicesOrigin(voices: SpeechSynthesisVoice[]) {
+        this.voicesOrigin = voices;
     }
     private setVoicesEn(voicesEn: SpeechSynthesisVoice[]) {
         this.voicesEn = voicesEn;
@@ -44,8 +56,30 @@ class Store implements StoreType {
             voices = speechSynthesis.getVoices();
             const voicesEn = voices.filter((item) => item.lang.split('-')[0] === 'en');
             const voicesRu = voices.filter((item) => item.lang.split('-')[0] === 'ru');
+            this.setVoicesOrigin(voices);
             this.setVoicesEn(voicesEn);
             this.setVoicesRu(voicesRu);
+        };
+    }
+    playSound(text: string, voiceType: string, onStart: VoidFunction, onEnd: VoidFunction) {
+        const selectedVoice =
+            voiceType === 'en'
+                ? this.voicesEn[this.voiceEnIndex]
+                : this.voicesRu[this.voiceRuIndex];
+        const voice = this.voicesOrigin.find((item) => item.name === selectedVoice.name);
+
+        speechSynthesis.cancel();
+
+        this.utterance.text = text;
+        this.utterance.voice = voice ?? this.voicesOrigin[0];
+        this.utterance.lang = voiceType === 'en' ? 'en-GB' : 'ru-RU';
+        speechSynthesis.speak(this.utterance);
+
+        this.utterance.onstart = () => {
+            onStart();
+        };
+        this.utterance.onend = () => {
+            onEnd();
         };
     }
 }

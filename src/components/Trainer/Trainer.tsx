@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
 
 import { Page } from '../Page/Page';
 import { Button, ThemeButton } from '../Button/Button';
@@ -11,6 +12,7 @@ import { TouchPanel } from './TouchPanel';
 import { useKeyboardHandler } from './useKeyboardHandler';
 import VolumeIcon from '../../assets/icons/volume.svg?react';
 import { Icon } from '../Icon/Icon';
+import { useStore } from '../../store/StoreContext';
 
 import styles from './Trainer.module.scss';
 
@@ -28,10 +30,12 @@ export const Trainer = (props: TrainerProps) => {
     const { id } = useParams<Params>();
     const { state } = useLocation();
     const navigate = useNavigate();
+    const store = useStore();
 
     const [sentenceIndex, setSentenceIndex] = useState(0);
     const [showEn, setShowEn] = useState<boolean>(state.selectedOption.en);
     const [showRu, setShowRu] = useState<boolean>(state.selectedOption.ru);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const [selectedLevel, selectedLesson] = id?.split('_') ?? ['A0, 1'];
 
@@ -55,11 +59,25 @@ export const Trainer = (props: TrainerProps) => {
         setSentenceIndex(newIndex);
     };
 
+    const playSound = (text: string, voiceType: string) => {
+        store.playSound(
+            text,
+            voiceType,
+            () => {
+                setIsPlaying(true);
+            },
+            () => {
+                setIsPlaying(false);
+            },
+        );
+    };
+
     useKeyboardHandler(
         handleNext,
         handlePrev,
         () => setShowEn(!showEn),
         () => setShowRu(!showRu),
+        () => playSound(sentences[sentenceIndex].en, 'en'),
     );
 
     if (isSentencesLoading) {
@@ -74,6 +92,7 @@ export const Trainer = (props: TrainerProps) => {
                     onPrev={handlePrev}
                     onShowEn={() => setShowEn(!showEn)}
                     onShowRu={() => setShowRu(!showRu)}
+                    onPlay={() => playSound(sentences[sentenceIndex].en, 'en')}
                 />
             )}
             <div className={styles.wrapper}>
@@ -90,12 +109,14 @@ export const Trainer = (props: TrainerProps) => {
                 isShowText={state.selectedOption.en}
                 isTouchText={showEn}
                 isSound={state.selectedOption.sound}
+                onPlaySound={playSound}
             />
             <Content
                 lang='ru'
                 sentence={sentences[sentenceIndex].ru}
                 isShowText={state.selectedOption.ru}
                 isTouchText={showRu}
+                onPlaySound={playSound}
             />
             <div className={styles.footer}>
                 <Button
@@ -111,10 +132,10 @@ export const Trainer = (props: TrainerProps) => {
                 </Button>
                 <Button
                     onClick={() => {
-                        //
+                        playSound(sentences[sentenceIndex].en, 'en');
                     }}
                     theme={ThemeButton.CLEAR}
-                    className={styles.button}
+                    className={classNames(styles.button, { [styles.buttonActive]: isPlaying })}
                 >
                     <Icon Svg={VolumeIcon} />
                 </Button>
