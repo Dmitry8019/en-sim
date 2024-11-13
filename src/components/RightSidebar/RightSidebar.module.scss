@@ -9,7 +9,7 @@ $widthPanel: 400px;
     right: 0;
     top: var(--navbar-height);
     z-index: 2;
-    transition: right 0.2s;
+    transition: right 0.3s ease-in;
 }
 
 .hidePanel {

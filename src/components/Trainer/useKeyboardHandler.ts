@@ -1,21 +1,33 @@
 import { useCallback, useEffect } from 'react';
 
-export const useKeyboardHandler = (
-    onNext: VoidFunction,
-    onPrev: VoidFunction,
-    onShowEn: VoidFunction,
-    onShowRu: VoidFunction,
-    onPlay: VoidFunction,
-) => {
+import { TextAction } from './types';
+
+export const useKeyboardHandler = (callback: (textAction: TextAction) => void) => {
     const processKeyboardUp = useCallback(
         ({ code }: KeyboardEvent) => {
-            if (code === 'Numpad8') return onShowEn();
-            if (code === 'Numpad2') return onShowRu();
-            if (code === 'Numpad6') return onNext();
-            if (code === 'Numpad4') return onPrev();
-            if (code === 'Numpad5') onPlay();
+            switch (code) {
+                case 'Numpad8': {
+                    callback(TextAction.SHOW_EN_TEXT);
+                    break;
+                }
+                case 'Numpad2': {
+                    callback(TextAction.SHOW_RU_TEXT);
+                    break;
+                }
+                case 'Numpad6': {
+                    callback(TextAction.NEXT_TEXT);
+                    break;
+                }
+                case 'Numpad4': {
+                    callback(TextAction.PREV_TEXT);
+                    break;
+                }
+                case 'Numpad5': {
+                    callback(TextAction.PLAYBACK);
+                }
+            }
         },
-        [onNext, onPrev, onShowEn, onShowRu, onPlay],
+        [callback],
     );
 
     useEffect(() => {

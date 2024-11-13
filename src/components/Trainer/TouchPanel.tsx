@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
+import { TextAction } from './types';
+
 import styles from './TouchPanel.module.scss';
 
 let startX = 0;
@@ -10,15 +12,11 @@ let endY = 0;
 
 interface TouchPanelProps {
     className?: string;
-    onPrev: VoidFunction;
-    onNext: VoidFunction;
-    onShowEn: VoidFunction;
-    onShowRu: VoidFunction;
-    onPlay: VoidFunction;
+    onTextAction: (textAction: TextAction) => void;
 }
 
 export const TouchPanel = (props: TouchPanelProps) => {
-    const { className, onNext, onPrev, onShowEn, onShowRu, onPlay } = props;
+    const { className, onTextAction } = props;
     const elementRef = useRef<HTMLDivElement>(null);
 
     const handleStart = (e: TouchEvent) => {
@@ -37,23 +35,23 @@ export const TouchPanel = (props: TouchPanelProps) => {
         const direction = wayX > wayY;
 
         if (startX === endX && startY === endY) {
-            onPlay();
+            return onTextAction(TextAction.PLAYBACK);
         }
 
         if (direction && startX < endX) {
-            onPrev();
+            return onTextAction(TextAction.PREV_TEXT);
         }
         if (direction && startX > endX) {
-            onNext();
+            return onTextAction(TextAction.NEXT_TEXT);
         }
 
         if (!direction && startY > endY) {
-            onShowEn();
+            return onTextAction(TextAction.SHOW_EN_TEXT);
         }
         if (!direction && startY < endY) {
-            onShowRu();
+            onTextAction(TextAction.SHOW_RU_TEXT);
         }
-    }, [onNext, onPlay, onPrev, onShowEn, onShowRu]);
+    }, [onTextAction]);
 
     const handleMove = (e: TouchEvent) => {
         endX = e.changedTouches[0].clientX;

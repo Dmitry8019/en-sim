@@ -1,66 +1,65 @@
-import { MouseEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { Button, ThemeButton } from '../../Button/Button';
 import { Icon } from '../../Icon/Icon';
 import CopyIcon from '../../../assets/icons/content-copy.svg?react';
+import ChoiceIcon from '../../../assets/icons/choice.svg?react';
+import SoundIcon from '../../../assets/icons/volume.svg?react';
+import ResetIcon from '../../../assets/icons/reset.svg?react';
 
 import styles from './Content.module.scss';
 
 interface ContentProps {
     className?: string;
     sentence: string;
-    isShowText: boolean;
+    showText: boolean;
+    onShowText: VoidFunction;
     transcription?: string;
-    isSound?: boolean;
-    lang: string;
-    isTouchText: boolean;
-    onPlaySound: (text: string, voiceType: string) => void;
+    onPlayback?: (text: string) => void;
 }
 
 export const Content = (props: ContentProps) => {
-    const {
-        className,
-        sentence,
-        transcription,
-        isShowText,
-        isSound,
-        lang,
-        isTouchText,
-        onPlaySound,
-    } = props;
-    const [showText, setShowText] = useState(isShowText);
+    const { className, sentence, transcription, showText, onShowText, onPlayback } = props;
+
     const [isShowTitle, setIsShowTitle] = useState(false);
-    const isFirstRender = useRef(true);
+    const [isEditingMode, setIsEditingMode] = useState(false);
+    const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+    const isShowText = isEditingMode ? true : showText;
 
-    const startPlaying = useCallback(
-        (text: string) => {
-            onPlaySound(text, lang);
-        },
-        [lang],
-    );
-
-    useLayoutEffect(() => {
-        setShowText(isShowText);
-        if (isSound) {
-            startPlaying(sentence);
-        }
-    }, [isShowText, isSound, sentence, startPlaying]);
+    const handleReset = () => {
+        setIsEditingMode(false);
+        setSelectedIndexes([]);
+    };
 
     useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
+        handleReset();
+    }, [sentence]);
+
+    const handleSelectedIndexes = (index: number) => {
+        if (!isEditingMode) {
             return;
         }
-        setShowText(!showText);
-    }, [isTouchText]);
+        const search = selectedIndexes.includes(index);
+        if (search) {
+            const abc = [...selectedIndexes];
+            const newAbc = abc.filter((item) => item !== index);
+            setSelectedIndexes(newAbc);
+        } else {
+            const abc = [...selectedIndexes];
+            abc.push(index);
+            setSelectedIndexes(abc);
+        }
+    };
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         const tagName = (e.target as HTMLDivElement).tagName;
-        if ((tagName === 'SPAN' && showText) || tagName === 'path' || tagName === 'svg') {
+        if (tagName === 'path' || tagName === 'svg') {
             return;
         }
-        setShowText(!showText);
+        if (!isEditingMode) {
+            onShowText();
+        }
     };
 
     const showTitle = () => {
@@ -78,10 +77,27 @@ export const Content = (props: ContentProps) => {
         document.body.removeChild(textarea);
     };
 
+    const handleEditingMode = () => {
+        if (!isShowText) {
+            onShowText();
+        }
+        if (!isEditingMode) {
+            setIsEditingMode(true);
+        }
+        if (isEditingMode && selectedIndexes.length < 1) {
+            setIsEditingMode(false);
+        }
+        if (selectedIndexes.length > 0) {
+            const abc = sentence.split(' ');
+            const newAbc = abc.filter((_, index) => selectedIndexes.includes(index)).join(' ');
+            onPlayback?.(newAbc);
+        }
+    };
+
     return (
         <div
             className={classNames(styles.content, className, {
-                [styles.marginBottom]: lang === 'ru',
+                [styles.marginBottom]: !transcription,
             })}
             onClick={handleClick}
             tabIndex={0}
@@ -90,25 +106,46 @@ export const Content = (props: ContentProps) => {
                 return (
                     <span
                         key={i}
-                        onClick={() => startPlaying(word)}
-                        className={classNames({ [styles.hideText]: !showText })}
+                        onClick={() => handleSelectedIndexes(i)}
+                        className={classNames(
+                            { [styles.hideText]: !isShowText },
+                            { [styles.activeWord]: selectedIndexes.includes(i) },
+                        )}
                     >
                         {word}{' '}
                     </span>
                 );
             })}
-            <p className={classNames(styles.transcription, { [styles.hideText]: !showText })}>
+            <p className={classNames(styles.transcription, { [styles.hideText]: !isShowText })}>
                 {transcription}
             </p>
 
-            <Button
-                theme={ThemeButton.CLEAR}
-                className={styles.button}
-                onClick={() => copyToClipBoard(sentence)}
-            >
-                <Icon Svg={CopyIcon} />
-                {isShowTitle && <div className={styles.showCopy}>Copy</div>}
-            </Button>
+            <div className={styles.groupButton}>
+                {transcription && (
+                    <>
+                        <Button theme={ThemeButton.CLEAR} onClick={handleReset}>
+                            <Icon Svg={ResetIcon} />
+                        </Button>
+                        <Button
+                            theme={ThemeButton.CLEAR}
+                            className={classNames({
+                                [styles.activeButton]: isEditingMode,
+                            })}
+                            onClick={handleEditingMode}
+                        >
+                            {selectedIndexes.length > 0 ? (
+                                <Icon Svg={SoundIcon} />
+                            ) : (
+                                <Icon Svg={ChoiceIcon} />
+                            )}
+                        </Button>
+                    </>
+                )}
+                <Button theme={ThemeButton.CLEAR} onClick={() => copyToClipBoard(sentence)}>
+                    <Icon Svg={CopyIcon} />
+                    {isShowTitle && <div className={styles.showCopy}>Copy</div>}
+                </Button>
+            </div>
         </div>
     );
 };
