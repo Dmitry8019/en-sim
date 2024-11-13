@@ -13,6 +13,7 @@ import { useKeyboardHandler } from './useKeyboardHandler';
 import VolumeIcon from '../../assets/icons/volume.svg?react';
 import { Icon } from '../Icon/Icon';
 import { useStore } from '../../store/StoreContext';
+import { TextAction } from './types';
 
 import styles from './Trainer.module.scss';
 
@@ -59,10 +60,10 @@ export const Trainer = (props: TrainerProps) => {
         setSentenceIndex(newIndex);
     };
 
-    const playSound = (text: string, voiceType: string) => {
+    const playSound = (text: string) => {
         store.playSound(
             text,
-            voiceType,
+            'en',
             () => {
                 setIsPlaying(true);
             },
@@ -72,13 +73,35 @@ export const Trainer = (props: TrainerProps) => {
         );
     };
 
-    useKeyboardHandler(
-        handleNext,
-        handlePrev,
-        () => setShowEn(!showEn),
-        () => setShowRu(!showRu),
-        () => playSound(sentences[sentenceIndex].en, 'en'),
-    );
+    const handleTextAction = (textAction: TextAction) => {
+        switch (textAction) {
+            case TextAction.SHOW_EN_TEXT: {
+                setShowEn(!showEn);
+                break;
+            }
+            case TextAction.SHOW_RU_TEXT: {
+                setShowRu(!showRu);
+                break;
+            }
+            case TextAction.NEXT_TEXT: {
+                handleNext();
+                setShowEn(state.selectedOption.en);
+                setShowRu(state.selectedOption.ru);
+                break;
+            }
+            case TextAction.PREV_TEXT: {
+                handlePrev();
+                setShowEn(state.selectedOption.en);
+                setShowRu(state.selectedOption.ru);
+                break;
+            }
+            case TextAction.PLAYBACK: {
+                playSound(sentences[sentenceIndex].en);
+            }
+        }
+    };
+
+    useKeyboardHandler(handleTextAction);
 
     if (isSentencesLoading) {
         return <Loader />;
@@ -87,13 +110,7 @@ export const Trainer = (props: TrainerProps) => {
     return (
         <Page className={className}>
             {window.matchMedia('(max-width: 710px)').matches && (
-                <TouchPanel
-                    onNext={handleNext}
-                    onPrev={handlePrev}
-                    onShowEn={() => setShowEn(!showEn)}
-                    onShowRu={() => setShowRu(!showRu)}
-                    onPlay={() => playSound(sentences[sentenceIndex].en, 'en')}
-                />
+                <TouchPanel onTextAction={handleTextAction} />
             )}
             <div className={styles.wrapper}>
                 <div className={styles.header}>
@@ -103,20 +120,18 @@ export const Trainer = (props: TrainerProps) => {
                 <p>{`${sentenceIndex + 1}${' / '}${sentences.length}`}</p>
             </div>
             <Content
-                lang='en'
                 sentence={sentences[sentenceIndex].en}
                 transcription={sentences[sentenceIndex].transcription}
-                isShowText={state.selectedOption.en}
-                isTouchText={showEn}
-                isSound={state.selectedOption.sound}
-                onPlaySound={playSound}
+                showText={showEn}
+                onShowText={() => setShowEn(!showEn)}
+                onPlayback={(text: string) => {
+                    playSound(text);
+                }}
             />
             <Content
-                lang='ru'
                 sentence={sentences[sentenceIndex].ru}
-                isShowText={state.selectedOption.ru}
-                isTouchText={showRu}
-                onPlaySound={playSound}
+                showText={showRu}
+                onShowText={() => setShowRu(!showRu)}
             />
             <div className={styles.footer}>
                 <Button
@@ -132,7 +147,7 @@ export const Trainer = (props: TrainerProps) => {
                 </Button>
                 <Button
                     onClick={() => {
-                        playSound(sentences[sentenceIndex].en, 'en');
+                        playSound(sentences[sentenceIndex].en);
                     }}
                     theme={ThemeButton.CLEAR}
                     className={classNames(styles.button, { [styles.buttonActive]: isPlaying })}
