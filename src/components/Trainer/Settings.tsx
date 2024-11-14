@@ -64,25 +64,6 @@ export const Settings = (props: SettingsProps) => {
         <div ref={elementRef} className={className}>
             {children}
             <div className={classNames(styles.settings, { [styles.hideSettings]: !showSettings })}>
-                {store.voicesEn.length > 0 && (
-                    <div className={styles.wrapper}>
-                        <div className={styles.label}>Voices</div>
-                        {store.voicesEn.map((item, index) => {
-                            return (
-                                <div
-                                    tabIndex={0}
-                                    key={item.name}
-                                    onClick={() => handleVoice(index)}
-                                    className={classNames(styles.voice, {
-                                        [styles.activeVoice]: activeVoice === index,
-                                    })}
-                                >
-                                    {item.name}
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
                 <div className={styles.wrapper}>
                     <div className={styles.label}>Speed</div>
                     <div className={styles.speed}>
@@ -109,6 +90,25 @@ export const Settings = (props: SettingsProps) => {
                         </Button>
                     </div>
                 </div>
+                {store.voicesEn.length > 0 && (
+                    <div className={styles.wrapper}>
+                        <div className={styles.label}>Voices</div>
+                        {store.voicesEn.map((item, index) => {
+                            return (
+                                <div
+                                    tabIndex={0}
+                                    key={item.name}
+                                    onClick={() => handleVoice(index)}
+                                    className={classNames(styles.voice, {
+                                        [styles.activeVoice]: activeVoice === index,
+                                    })}
+                                >
+                                    {item.name}
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );
