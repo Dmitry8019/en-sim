@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -10,10 +10,12 @@ import { Loader } from '../Loader/Loader';
 import { useGetSentencesQuery } from './trainer.query';
 import { TouchPanel } from './TouchPanel';
 import { useKeyboardHandler } from './useKeyboardHandler';
-import VolumeIcon from '../../assets/icons/volume.svg?react';
 import { Icon } from '../Icon/Icon';
-import { useStore } from '../../store/StoreContext';
 import { TextAction } from './types';
+import VolumeIcon from '../../assets/icons/volume.svg?react';
+import SettingsIcon from '../../assets/icons/settings.svg?react';
+import store from '../../store/Store';
+import { Settings } from './Settings';
 
 import styles from './Trainer.module.scss';
 
@@ -31,23 +33,45 @@ export const Trainer = (props: TrainerProps) => {
     const { id } = useParams<Params>();
     const { state } = useLocation();
     const navigate = useNavigate();
-    const store = useStore();
+    store.initVoices();
 
     const [sentenceIndex, setSentenceIndex] = useState(0);
     const [showEn, setShowEn] = useState<boolean>(state.selectedOption.en);
     const [showRu, setShowRu] = useState<boolean>(state.selectedOption.ru);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     const [selectedLevel, selectedLesson] = id?.split('_') ?? ['A0, 1'];
 
-    const { sentences = [], isSentencesLoading } = useGetSentencesQuery(
+    const { sentences = [], sentenceStatus } = useGetSentencesQuery(
         `${selectedLevel}_${selectedLesson}`,
     );
+
+    const playSound = (text: string) => {
+        store.playSound(
+            text,
+            () => {
+                setIsPlaying(true);
+            },
+            () => {
+                setIsPlaying(false);
+            },
+        );
+    };
+
+    useEffect(() => {
+        if (sentenceStatus === 'idle' && sentences.length > 0 && state.selectedOption.sound) {
+            playSound(sentences[0].en);
+        }
+    }, [sentences, sentenceStatus, state]);
 
     const handleNext = () => {
         const newIndex = sentenceIndex + 1;
         if (newIndex >= sentences.length) {
             return;
+        }
+        if (state.selectedOption.sound) {
+            playSound(sentences[newIndex].en);
         }
         setSentenceIndex(newIndex);
     };
@@ -57,20 +81,10 @@ export const Trainer = (props: TrainerProps) => {
         if (newIndex < 0) {
             return;
         }
+        if (state.selectedOption.sound) {
+            playSound(sentences[newIndex].en);
+        }
         setSentenceIndex(newIndex);
-    };
-
-    const playSound = (text: string) => {
-        store.playSound(
-            text,
-            'en',
-            () => {
-                setIsPlaying(true);
-            },
-            () => {
-                setIsPlaying(false);
-            },
-        );
     };
 
     const handleTextAction = (textAction: TextAction) => {
@@ -103,7 +117,7 @@ export const Trainer = (props: TrainerProps) => {
 
     useKeyboardHandler(handleTextAction);
 
-    if (isSentencesLoading) {
+    if (sentenceStatus !== 'idle') {
         return <Loader />;
     }
 
@@ -145,15 +159,28 @@ export const Trainer = (props: TrainerProps) => {
                 >
                     Exit
                 </Button>
-                <Button
-                    onClick={() => {
-                        playSound(sentences[sentenceIndex].en);
-                    }}
-                    theme={ThemeButton.CLEAR}
-                    className={classNames(styles.button, { [styles.buttonActive]: isPlaying })}
+                <Settings
+                    onShowSettings={() => setShowSettings(false)}
+                    showSettings={showSettings}
+                    className={styles.wrapperSettings}
                 >
-                    <Icon Svg={VolumeIcon} />
-                </Button>
+                    <Button
+                        theme={ThemeButton.CLEAR}
+                        className={styles.button}
+                        onClick={() => setShowSettings(!showSettings)}
+                    >
+                        <Icon Svg={SettingsIcon} />
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            playSound(sentences[sentenceIndex].en);
+                        }}
+                        theme={ThemeButton.CLEAR}
+                        className={classNames(styles.button, { [styles.buttonActive]: isPlaying })}
+                    >
+                        <Icon Svg={VolumeIcon} />
+                    </Button>
+                </Settings>
                 {!window.matchMedia('(max-width: 710px)').matches && (
                     <>
                         <Button
