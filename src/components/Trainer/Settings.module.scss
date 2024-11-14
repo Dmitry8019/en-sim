@@ -12,6 +12,9 @@ $widthPanel: 400px;
     top: var(--navbar-height);
     z-index: -1;
     transition: right 0.3s ease-in;
+    overflow: auto;
+
+    @include scrollbar;
 
     .label {
         font-size: 20px;
@@ -46,6 +49,10 @@ $widthPanel: 400px;
             color: var(--primary-color);
             padding: 5px 30px;
             border-radius: 5px;
+        }
+
+        &:last-child {
+            margin-bottom: 100px;
         }
     }
 }
