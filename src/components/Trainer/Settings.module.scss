@@ -1,0 +1,65 @@
+@import "../../styles/mixins.scss";
+
+$widthPanel: 400px;
+
+.settings {
+    background: var(--bg-sidebar);
+    position: fixed;
+    width: $widthPanel;
+    height: 100%;
+    padding: 15px;
+    right: 0;
+    top: var(--navbar-height);
+    z-index: -1;
+    transition: right 0.3s ease-in;
+
+    .label {
+        font-size: 20px;
+        opacity: 0.5;
+    }
+
+    .wrapper {
+        margin-bottom: 20px;
+        border-radius: 5px;
+
+        .voice {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+
+            @include focusVisible;
+        }
+        .activeVoice {
+            background: var(--bg-tab-active);
+        }
+
+        .speed {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .button {
+            background: var(--bg-tab);
+            color: var(--primary-color);
+            padding: 5px 30px;
+            border-radius: 5px;
+        }
+    }
+}
+
+.hideSettings {
+    right: -$widthPanel;
+}
+
+@media (max-width: 710px) {
+    .settings {
+        width: 100%;
+    }
+
+    .hideSettings {
+        right: -100%;
+    }
+}
