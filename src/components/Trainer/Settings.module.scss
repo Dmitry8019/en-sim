@@ -1,4 +1,4 @@
-@import "../../styles/mixins.scss";
+@use "../../styles/mixins.scss";
 
 $widthPanel: 400px;
 
@@ -14,7 +14,7 @@ $widthPanel: 400px;
     transition: right 0.3s ease-in;
     overflow: auto;
 
-    @include scrollbar;
+    @include mixins.scrollbar();
 
     .label {
         font-size: 20px;
@@ -31,7 +31,7 @@ $widthPanel: 400px;
             border-radius: 5px;
             font-size: 14px;
 
-            @include focusVisible;
+            @include mixins.focusVisible();
         }
         .activeVoice {
             background: var(--bg-tab-active);

@@ -1,4 +1,4 @@
-@import "../../styles/mixins.scss";
+@use "../../styles/mixins.scss";
 
 .page {
     flex-grow: 1;
@@ -8,5 +8,5 @@
     scrollbar-gutter: stable;
     position: relative;
 
-    @include scrollbar();
+    @include mixins.scrollbar();
 }

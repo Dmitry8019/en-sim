@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@use "../../../styles/mixins.scss";
 
 .content {
     background: var(--bg-navbar);
@@ -9,7 +9,7 @@
     cursor: pointer;
     position: relative;
 
-    @include focusVisible;
+    @include mixins.focusVisible();
 
     p {
         font-size: 16px;
