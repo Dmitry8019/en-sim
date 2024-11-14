@@ -1,4 +1,4 @@
-@import "../../styles/mixins.scss";
+@use "../../styles/mixins.scss";
 
 .link {
     display: flex;
@@ -6,7 +6,7 @@
     padding: 15px 10px;
     overflow: hidden;
 
-    @include focusVisible;
+    @include mixins.focusVisible();
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {

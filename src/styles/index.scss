@@ -1,7 +1,7 @@
-@import "reset.scss";
-@import "variables/global.scss";
-@import "themes/dark.scss";
-@import "mixins.scss";
+@use "reset.scss";
+@use "variables/global.scss";
+@use "themes/dark.scss";
+@use "mixins.scss";
 
 .app {
     background: var(--bg-color);
@@ -17,7 +17,7 @@
             width: 100%;
             padding: 15px 25px;
 
-            @include scrollbar;
+            @include mixins.scrollbar();
         }
     }
 }
