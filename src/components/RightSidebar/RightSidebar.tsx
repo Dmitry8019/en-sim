@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames';
 
-import { Button, ThemeButton } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
+import { AppTheme } from '../../types';
+import { Button, ThemeButton } from '../Button/Button';
+import { ClickOutside } from '../../hooks/ClickOutside';
+
 import SettingIcon from '../../assets/icons/settings.svg?react';
 
 import styles from './RightSidebar.module.scss';
-import { AppTheme } from '../../types';
 
 interface RightSidebarProps {
     className?: string;
@@ -18,29 +20,15 @@ export const RightSidebar = (props: RightSidebarProps) => {
     const { className, onTheme, theme } = props;
 
     const [hideRightSidebar, setHideRightSidebar] = useState(true);
-    const elementRef = useRef<HTMLDivElement>(null);
-
-    const handleClick = useCallback((e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-        if (!elementRef.current?.contains(target)) {
-            setHideRightSidebar(true);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (!hideRightSidebar) {
-            document.addEventListener('click', handleClick);
-        } else {
-            document.removeEventListener('click', handleClick);
-        }
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
-    }, [hideRightSidebar, handleClick]);
 
     return (
-        <div className={className} ref={elementRef}>
+        <ClickOutside
+            className={className}
+            onShowElement={() => {
+                setHideRightSidebar(true);
+            }}
+            showElement={!hideRightSidebar}
+        >
             <Button
                 theme={ThemeButton.CLEAR}
                 onClick={() => setHideRightSidebar(!hideRightSidebar)}
@@ -69,6 +57,6 @@ export const RightSidebar = (props: RightSidebarProps) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </ClickOutside>
     );
 };
