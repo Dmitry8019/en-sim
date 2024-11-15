@@ -1,8 +1,9 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
 import store from '../../store/Store';
 import { Button, ThemeButton } from '../Button/Button';
+import { ClickOutside } from '../../hooks/ClickOutside';
 
 import styles from './Settings.module.scss';
 
@@ -15,31 +16,9 @@ interface SettingsProps {
 
 export const Settings = (props: SettingsProps) => {
     const { className, children, onShowSettings, showSettings } = props;
-    const elementRef = useRef<HTMLDivElement>(null);
+
     const [activeVoice, setActiveVoice] = useState(store.voiceEnIndex);
     const [rate, setRate] = useState(store.rate);
-
-    const handleClick = useCallback(
-        (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (!elementRef.current?.contains(target)) {
-                onShowSettings();
-            }
-        },
-        [onShowSettings],
-    );
-
-    useEffect(() => {
-        if (showSettings) {
-            document.addEventListener('click', handleClick);
-        } else {
-            document.removeEventListener('click', handleClick);
-        }
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
-    }, [handleClick, showSettings]);
 
     const handleVoice = (index: number) => {
         store.setVoiceEnIndex(index);
@@ -61,7 +40,11 @@ export const Settings = (props: SettingsProps) => {
     };
 
     return (
-        <div ref={elementRef} className={className}>
+        <ClickOutside
+            className={className}
+            onShowElement={onShowSettings}
+            showElement={showSettings}
+        >
             {children}
             <div className={classNames(styles.settings, { [styles.hideSettings]: !showSettings })}>
                 <div className={styles.wrapper}>
@@ -110,6 +93,6 @@ export const Settings = (props: SettingsProps) => {
                     </div>
                 )}
             </div>
-        </div>
+        </ClickOutside>
     );
 };

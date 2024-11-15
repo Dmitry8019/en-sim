@@ -82,8 +82,9 @@ class Store implements StoreType {
 
         if (voice?.lang) {
             this.utterance.voice = voice;
+            this.utterance.lang = voice.lang;
         }
-        this.utterance.lang = voice?.lang ?? 'en-GB';
+        // this.utterance.lang = voice?.lang ?? 'en-GB';
 
         speechSynthesis.speak(this.utterance);
 
