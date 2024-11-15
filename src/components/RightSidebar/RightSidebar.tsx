@@ -6,13 +6,16 @@ import { Icon } from '../Icon/Icon';
 import SettingIcon from '../../assets/icons/settings.svg?react';
 
 import styles from './RightSidebar.module.scss';
+import { AppTheme } from '../../types';
 
 interface RightSidebarProps {
     className?: string;
+    theme: AppTheme;
+    onTheme: (theme: AppTheme) => void;
 }
 
 export const RightSidebar = (props: RightSidebarProps) => {
-    const { className } = props;
+    const { className, onTheme, theme } = props;
 
     const [hideRightSidebar, setHideRightSidebar] = useState(true);
     const elementRef = useRef<HTMLDivElement>(null);
@@ -46,7 +49,25 @@ export const RightSidebar = (props: RightSidebarProps) => {
             </Button>
 
             <div className={classNames(styles.panel, { [styles.hidePanel]: hideRightSidebar })}>
-                text
+                <div className={styles.wrapper}>
+                    <div className={styles.label}>Theme</div>
+                    <div
+                        className={classNames(styles.text, {
+                            [styles.activeText]: theme === AppTheme.LIGHT,
+                        })}
+                        onClick={() => onTheme(AppTheme.LIGHT)}
+                    >
+                        Light
+                    </div>
+                    <div
+                        className={classNames(styles.text, {
+                            [styles.activeText]: theme === AppTheme.DARK,
+                        })}
+                        onClick={() => onTheme(AppTheme.DARK)}
+                    >
+                        Dark
+                    </div>
+                </div>
             </div>
         </div>
     );

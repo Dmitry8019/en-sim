@@ -1,3 +1,5 @@
+@use "../../styles/mixins";
+
 $widthPanel: 400px;
 
 .panel {
@@ -10,6 +12,29 @@ $widthPanel: 400px;
     top: var(--navbar-height);
     z-index: 2;
     transition: right 0.3s ease-in;
+
+    .wrapper {
+        margin-bottom: 20px;
+        border-radius: 5px;
+
+        .label {
+            font-size: 20px;
+            opacity: 0.5;
+        }
+
+        .text {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+
+            @include mixins.focusVisible();
+        }
+
+        .activeText {
+            background: var(--bg-tab-active);
+        }
+    }
 }
 
 .hidePanel {
