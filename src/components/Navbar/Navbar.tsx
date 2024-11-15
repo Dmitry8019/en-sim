@@ -1,12 +1,20 @@
+import { AppTheme } from '../../types';
 import { AppLogo } from '../AppLogo/AppLogo';
 import { RightSidebar } from '../RightSidebar/RightSidebar';
 import styles from './Navbar.module.scss';
 
-export const Navbar = () => {
+interface NavbarProps {
+    theme: AppTheme;
+    onTheme: (theme: AppTheme) => void;
+}
+
+export const Navbar = (props: NavbarProps) => {
+    const { onTheme, theme } = props;
+
     return (
         <div className={styles.navbar}>
             <AppLogo className={styles.logoPosition} />
-            <RightSidebar />
+            <RightSidebar theme={theme} onTheme={onTheme} />
         </div>
     );
 };

@@ -73,16 +73,18 @@ class Store implements StoreType {
 
         const selectedVoice = this.voicesEn[this.voiceEnIndex];
         const voice =
-            this.voicesOrigin.find((item) => item.name === selectedVoice.name) ??
+            this.voicesOrigin.find((item) => item?.name === selectedVoice?.name) ??
             this.voicesOrigin[0];
 
         this.utterance.text = text;
         this.utterance.rate = this.rate;
+        this.utterance.pitch = 1;
 
         if (voice?.lang) {
             this.utterance.voice = voice;
-            this.utterance.lang = voice.lang;
         }
+        this.utterance.lang = voice?.lang ?? 'en-GB';
+
         speechSynthesis.speak(this.utterance);
 
         this.utterance.onstart = () => {
