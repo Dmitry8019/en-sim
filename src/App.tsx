@@ -1,17 +1,14 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Navbar } from './components/Navbar/Navbar';
 import { Sidebar } from './components/Sidebar/Sidebar';
+import { AppTheme, STORAGE_KEY_THEME } from './types';
 
 import './styles/index.scss';
 import './index.css';
-import { useState } from 'react';
-import { AppTheme, STORAGE_KEY_THEME } from './types';
 
 function App() {
-    //
-    localStorage.setItem('user', '"eyLgleoxlevn4490sofg.dl95sPPlkjvkd.g30984lijvuSDbvdlwfEF"');
-
     const [theme, setTheme] = useState<AppTheme>(
         (localStorage.getItem(STORAGE_KEY_THEME) as AppTheme) ?? AppTheme.DARK,
     );
