@@ -17,6 +17,7 @@
         z-index: 10;
         left: 0;
     }
+
     .collapsed {
         width: 0;
         left: -20px;
@@ -38,6 +39,39 @@
     min-width: calc(var(--sidebar-width) - 70px);
     max-width: calc(var(--sidebar-width) - 70px);
 }
+
+.auth {
+    display: flex;
+    justify-content: center;
+    color: var(--primary-color);
+    gap: 20px;
+    left: 15px;
+    position: absolute;
+    transition: all 0.3s;
+    bottom: 50px;
+
+    svg {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+    }
+
+    p {
+        transition: all 0.3s;
+    }
+}
+
+.hideAuth {
+    bottom: 20px;
+}
+
+@media (max-width: 710px) {
+    .hideAuth {
+        bottom: 50px;
+        left: -20px;
+    }
+}
+
 .hideText {
     opacity: 0;
     transform: scaleY(0);

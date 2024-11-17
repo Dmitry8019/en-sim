@@ -1,6 +1,7 @@
 import { AppTheme } from '../../types';
 import { AppLogo } from '../AppLogo/AppLogo';
 import { RightSidebar } from '../RightSidebar/RightSidebar';
+
 import styles from './Navbar.module.scss';
 
 interface NavbarProps {
