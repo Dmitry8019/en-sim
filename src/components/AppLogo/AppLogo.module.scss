@@ -1,9 +1,9 @@
-$outlineColor: rgb(60, 60, 60);
+$outlineColor: var(--color-logo-one);
 $outlineBorder: 4px;
 
 .text {
     font-size: 15px;
-    color: rgb(177, 177, 177);
+    color: var(--color-logo-two);
     font-weight: bold;
     text-shadow: -0 -1px $outlineBorder $outlineColor, 0 -1px $outlineBorder $outlineColor,
         -0 1px $outlineBorder $outlineColor, 0 1px $outlineBorder $outlineColor,
