@@ -76,20 +76,22 @@ export const Settings = (props: SettingsProps) => {
                 {store.voicesEn.length > 0 && (
                     <div className={styles.wrapper}>
                         <div className={styles.label}>Voices</div>
-                        {store.voicesEn.map((item, index) => {
-                            return (
-                                <div
-                                    tabIndex={0}
-                                    key={item.name}
-                                    onClick={() => handleVoice(index)}
-                                    className={classNames(styles.voice, {
-                                        [styles.activeVoice]: activeVoice === index,
-                                    })}
-                                >
-                                    {item.name}
-                                </div>
-                            );
-                        })}
+                        <div className={styles.wrapperVoices}>
+                            {store.voicesEn.map((item, index) => {
+                                return (
+                                    <div
+                                        tabIndex={0}
+                                        key={item.name}
+                                        onClick={() => handleVoice(index)}
+                                        className={classNames(styles.voice, {
+                                            [styles.activeVoice]: activeVoice === index,
+                                        })}
+                                    >
+                                        {item.name}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
             </div>
