@@ -16,6 +16,13 @@ $widthPanel: 400px;
 
     @include mixins.scrollbar();
 
+    .wrapperVoices {
+        max-height: 400px;
+        overflow: auto;
+
+        @include mixins.scrollbar();
+    }
+
     .label {
         font-size: 20px;
         opacity: 0.5;
