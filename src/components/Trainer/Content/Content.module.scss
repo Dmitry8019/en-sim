@@ -28,6 +28,8 @@
 
 .activeWord {
     color: var(--bg-sidebar-active);
+    text-shadow: 1px 1px 2px var(--color-text-shadow), 0 0 0.3em var(--color-text-shadow),
+        0 0 0.2em var(--color-text-shadow);
 }
 
 .transcription {
@@ -52,6 +54,7 @@
         svg {
             fill: var(--bg-sidebar-active);
             opacity: 1;
+            filter: drop-shadow(2px 2px 2px var(--color-svg-filter));
         }
     }
 }
