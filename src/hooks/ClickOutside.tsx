@@ -23,13 +23,13 @@ export const ClickOutside = (props: useClickOutsideProps) => {
 
     useEffect(() => {
         if (showElement) {
-            document.addEventListener('click', handleClick);
+            document.addEventListener('click', handleClick, true);
         } else {
-            document.removeEventListener('click', handleClick);
+            document.removeEventListener('click', handleClick, true);
         }
 
         return () => {
-            document.removeEventListener('click', handleClick);
+            document.removeEventListener('click', handleClick, true);
         };
     }, [handleClick, showElement]);
 

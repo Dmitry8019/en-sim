@@ -6,6 +6,8 @@ export const useLoginByUserNameMutation = (saveAuth: (token: User) => void) => {
         mutate: loginByUserName,
         isError: isLoginByUserNameError,
         isSuccess: isLoginByUserNameSuccess,
+        reset: loginByUserNameReset,
+        isPending: isLoginByUserNamePending,
     } = useMutation({
         mutationFn: (authData: LoginByUsernameProps) => loginApi.login(authData),
         onSuccess: (data: User) => {
@@ -17,5 +19,7 @@ export const useLoginByUserNameMutation = (saveAuth: (token: User) => void) => {
         loginByUserName,
         isLoginByUserNameError,
         isLoginByUserNameSuccess,
+        loginByUserNameReset,
+        isLoginByUserNamePending,
     };
 };

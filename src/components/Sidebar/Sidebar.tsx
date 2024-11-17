@@ -41,13 +41,33 @@ export const Sidebar = (props: SidebarProps) => {
     const [showModal, setShowModal] = useState(false);
     const isLogin = Boolean(localStorage.getItem(USER_LOCAL_STORAGE_KEY));
 
-    const saveAuth = (auth: User) => {
-        setShowModal(false);
-        localStorage.setItem(USER_LOCAL_STORAGE_KEY, JSON.stringify(auth));
-        window.location.reload();
+    const handleModal = (value: boolean) => {
+        setShowModal(value);
+        loginByUserNameReset();
     };
+
+    const saveAuth = (auth: User) => {
+        const isMobile = window.matchMedia('(max-width: 710px)').matches;
+        handleModal(false);
+        if (isMobile) {
+            setSidebarSwitchStatus(SidebarSwitcher.HIDE);
+        }
+        setTimeout(() => {
+            if (isMobile) {
+                localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, SidebarSwitcher.HIDE);
+            }
+            localStorage.setItem(USER_LOCAL_STORAGE_KEY, JSON.stringify(auth));
+            window.location.reload();
+        }, 500);
+    };
+
     const location = useLocation();
-    const { loginByUserName } = useLoginByUserNameMutation(saveAuth);
+    const {
+        loginByUserName,
+        isLoginByUserNameError,
+        loginByUserNameReset,
+        isLoginByUserNamePending,
+    } = useLoginByUserNameMutation(saveAuth);
 
     const [sidebarSwitchStatus, setSidebarSwitchStatus] =
         useState<SidebarSwitcher>(defaultSidebarSwitcher);
@@ -79,11 +99,21 @@ export const Sidebar = (props: SidebarProps) => {
     }, [location]);
 
     const handleLogout = (value: boolean) => {
+        const isMobile = window.matchMedia('(max-width: 710px)').matches;
         if (value) {
-            localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
-            window.location.reload();
+            handleModal(false);
+            if (isMobile) {
+                setSidebarSwitchStatus(SidebarSwitcher.HIDE);
+            }
+            setTimeout(() => {
+                localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
+                if (isMobile) {
+                    localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, SidebarSwitcher.HIDE);
+                }
+                window.location.reload();
+            }, 500);
         }
-        setShowModal(false);
+        handleModal(false);
     };
 
     const handleLogin = (formData: FormLogin) => {
@@ -100,7 +130,7 @@ export const Sidebar = (props: SidebarProps) => {
                     <div>{itemsList}</div>
                     <div>
                         <ClickOutside
-                            onShowElement={() => setShowModal(false)}
+                            onShowElement={() => handleModal(false)}
                             showElement={showModal}
                         >
                             <Button
@@ -108,7 +138,7 @@ export const Sidebar = (props: SidebarProps) => {
                                 className={classNames(styles.auth, {
                                     [styles.hideAuth]: !isBurger,
                                 })}
-                                onClick={() => setShowModal(!showModal)}
+                                onClick={() => handleModal(!showModal)}
                             >
                                 <Icon Svg={isLogin ? EnSimIcon : LogoutIcon} />
                                 <p
@@ -140,7 +170,12 @@ export const Sidebar = (props: SidebarProps) => {
                                         </Button>
                                     </>
                                 ) : (
-                                    <LoginForm onLogin={handleLogin} />
+                                    <LoginForm
+                                        onLogin={handleLogin}
+                                        isError={isLoginByUserNameError}
+                                        isReset={showModal}
+                                        disabled={isLoginByUserNamePending}
+                                    />
                                 )}
                             </Modal>
                         </ClickOutside>
