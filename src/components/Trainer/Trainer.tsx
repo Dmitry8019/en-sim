@@ -36,16 +36,18 @@ export const Trainer = (props: TrainerProps) => {
     store.initVoices();
 
     const [sentenceIndex, setSentenceIndex] = useState(0);
-    const [showEn, setShowEn] = useState<boolean>(state.selectedOption.en);
-    const [showRu, setShowRu] = useState<boolean>(state.selectedOption.ru);
+    const [showEn, setShowEn] = useState<boolean>(state?.selectedOption.en);
+    const [showRu, setShowRu] = useState<boolean>(state?.selectedOption.ru);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
     const [selectedLevel, selectedLesson] = id?.split('_') ?? ['A0, 1'];
 
-    const { sentences = [], sentenceStatus } = useGetSentencesQuery(
-        `${selectedLevel}_${selectedLesson}`,
-    );
+    const {
+        sentences = [],
+        sentenceStatus,
+        isSentencesError,
+    } = useGetSentencesQuery(`${selectedLevel}_${selectedLesson}`);
 
     const playSound = (text: string) => {
         store.playSound(
@@ -119,6 +121,10 @@ export const Trainer = (props: TrainerProps) => {
 
     if (sentenceStatus !== 'idle') {
         return <Loader />;
+    }
+
+    if (isSentencesError) {
+        return <div className={styles.login}>You need to Login</div>;
     }
 
     return (

@@ -6,4 +6,36 @@
         width: 100%;
         margin-bottom: 20px;
     }
+
+    input {
+        padding: 5px;
+        border-radius: 5px;
+        background: var(--bg-color);
+        color: var(--primary-color);
+        outline: none;
+        border: 1px solid transparent;
+
+        &:focus {
+            border: 1px solid var(--bg-tab-active);
+        }
+    }
+
+    .error {
+        position: absolute;
+        bottom: 8px;
+        color: var(--color-error);
+        padding: 0 20px;
+        border-radius: 8px;
+    }
+
+    .wrapperPassword {
+        position: relative;
+
+        .icon {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            fill: var(--bg-color);
+        }
+    }
 }

@@ -50,4 +50,15 @@
         height: 55.4vh;
         width: 100%;
     }
+
+    .login {
+        background: var(--color-warning);
+        color: var(--primary-color);
+        padding: 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+    }
 }

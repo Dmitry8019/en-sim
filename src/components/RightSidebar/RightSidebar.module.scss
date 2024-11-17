@@ -10,7 +10,7 @@ $widthPanel: 400px;
     padding: 15px;
     right: 0;
     top: var(--navbar-height);
-    z-index: 2;
+    z-index: 100;
     transition: right 0.3s ease-in;
 
     .wrapper {

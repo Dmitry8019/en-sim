@@ -32,7 +32,7 @@ export const TrainerPage = (props: TrainerPageProps) => {
     const [selectedOption, setSelectedOption] = useState(initialOption);
     const [selectedLesson, setSelectedLesson] = useState(initialLesson);
 
-    const { lessons = [], isLessonsLoading } = useGetLessonsQuery(selectedLevel);
+    const { lessons = [], isLessonsLoading, isLessonsError } = useGetLessonsQuery(selectedLevel);
 
     const { onScrollPosition, getScrollPosition, initialScrollPosition } = useScroll(
         lessons.length,
@@ -76,10 +76,14 @@ export const TrainerPage = (props: TrainerPageProps) => {
                         </Button>
                     );
                 })}
+                {isLessonsError && <div className={styles.login}>You need to Login</div>}
                 <Button
                     theme={ThemeButton.CLEAR}
                     className={styles.start}
                     onClick={() => {
+                        if (isLessonsError) {
+                            return;
+                        }
                         navigate(`${selectedLevel}_${selectedLesson}`, {
                             state: { selectedOption, scrollPosition: getScrollPosition() },
                         });
