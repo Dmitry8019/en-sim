@@ -94,26 +94,6 @@ export const Settings = (props: SettingsProps) => {
                         </div>
                     </div>
                 )}
-
-                {/* NOTE need to delete */}
-                {/* <div>
-                    <p>{`typeof: ${typeof store.voicesOrigin}`}</p>
-                    <p>{`isArray: ${Array.isArray(store.voicesOrigin)}`}</p>
-                    <p>{`Length: ${store.voicesOrigin?.length}`}</p>
-                    <p>--</p>
-                    {store.voicesOrigin.map((item, i) => {
-                        return (
-                            <div key={i} style={{ marginBottom: '20px' }}>
-                                <p>{`[0].default: ${item.default}`}</p>
-                                <p>{`[0].lang: ${item.lang}`}</p>
-                                <p>{`[0].localService: ${item.localService}`}</p>
-                                <p>{`[0].name: ${item.name}`}</p>
-                                <p>{`[0].voiceURI: ${item.voiceURI}`}</p>
-                            </div>
-                        );
-                    })}
-                </div> */}
-                {/* ///////////// */}
             </div>
         </ClickOutside>
     );
