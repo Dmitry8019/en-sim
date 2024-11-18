@@ -64,53 +64,25 @@ class Store implements StoreType {
         if (voices.length < 1) {
             return;
         }
-        const voicesEn = voices.filter((item) => item.lang.split('-')[0] === 'en');
-        const voicesEnMobile = voices.filter((item) => item.lang.split('_')[0] === 'en');
+        const voicesEn = voices.filter((item) => item.lang.substring(0, 2) === 'en');
         this.setVoicesOrigin(voices);
-        this.setVoicesEn(voicesEn?.length > 0 ? voicesEn : voicesEnMobile);
+        this.setVoicesEn(voicesEn);
     }
-    // playSound(text: string, onStart: VoidFunction, onEnd: VoidFunction) {
-    //     speechSynthesis.cancel();
-    //     const utterance = new SpeechSynthesisUtterance(text);
-
-    //     const selectedVoice = this.voicesEn[this.voiceEnIndex];
-    //     const voice =
-    //         this.voicesOrigin.find((item) => item?.name === selectedVoice?.name) ??
-    //         this.voicesOrigin[0];
-
-    //     utterance.lang = voice?.lang ? voice.lang : 'en-GB';
-    //     utterance.rate = this.rate;
-    //     utterance.pitch = 1;
-
-    //     if (voice?.lang) {
-    //         utterance.voice = voice;
-    //     }
-
-    //     speechSynthesis.speak(utterance);
-
-    //     utterance.onstart = () => {
-    //         onStart();
-    //     };
-    //     utterance.onend = () => {
-    //         onEnd();
-    //     };
-    // }
     playSound(text: string, onStart: VoidFunction, onEnd: VoidFunction) {
         speechSynthesis.cancel();
 
         const selectedVoice = this.voicesEn[this.voiceEnIndex];
-        const voice =
-            this.voicesOrigin.find((item) => item?.name === selectedVoice?.name) ??
-            this.voicesOrigin[0];
+        const voice = this.voicesOrigin.find((item) => item?.name === selectedVoice?.name);
 
-        this.utterance.lang = 'en-GB';
         this.utterance.text = text;
         this.utterance.rate = this.rate;
         this.utterance.pitch = 1;
 
-        if (voice?.lang) {
+        if (voice) {
             this.utterance.voice = voice;
             this.utterance.lang = voice.lang;
+        } else {
+            this.utterance.lang = 'en-GB';
         }
 
         speechSynthesis.speak(this.utterance);
