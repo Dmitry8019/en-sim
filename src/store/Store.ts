@@ -76,6 +76,7 @@ class Store implements StoreType {
             this.voicesOrigin.find((item) => item?.name === selectedVoice?.name) ??
             this.voicesOrigin[0];
 
+        this.utterance.lang = 'en-GB';
         this.utterance.text = text;
         this.utterance.rate = this.rate;
         this.utterance.pitch = 1;
@@ -84,7 +85,7 @@ class Store implements StoreType {
             this.utterance.voice = voice;
             this.utterance.lang = voice.lang;
         }
-
+        console.log(this.voicesOrigin);
         speechSynthesis.speak(this.utterance);
 
         this.utterance.onstart = () => {
