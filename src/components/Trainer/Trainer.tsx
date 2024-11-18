@@ -190,14 +190,14 @@ export const Trainer = (props: TrainerProps) => {
                 {!window.matchMedia('(max-width: 710px)').matches && (
                     <>
                         <Button
-                            onClick={handlePrev}
+                            onClick={() => handleTextAction(TextAction.PREV_TEXT)}
                             theme={ThemeButton.CLEAR}
                             className={styles.button}
                         >
                             Prev
                         </Button>
                         <Button
-                            onClick={handleNext}
+                            onClick={() => handleTextAction(TextAction.NEXT_TEXT)}
                             theme={ThemeButton.CLEAR}
                             className={styles.button}
                         >
