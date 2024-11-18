@@ -70,31 +70,57 @@ class Store implements StoreType {
     }
     playSound(text: string, onStart: VoidFunction, onEnd: VoidFunction) {
         speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
 
         const selectedVoice = this.voicesEn[this.voiceEnIndex];
         const voice =
             this.voicesOrigin.find((item) => item?.name === selectedVoice?.name) ??
             this.voicesOrigin[0];
 
-        this.utterance.lang = 'en-GB';
-        this.utterance.text = text;
-        this.utterance.rate = this.rate;
-        this.utterance.pitch = 1;
+        utterance.lang = voice?.lang ? voice.lang : 'en-GB';
+        utterance.rate = this.rate;
+        utterance.pitch = 1;
 
         if (voice?.lang) {
-            this.utterance.voice = voice;
-            this.utterance.lang = voice.lang;
+            utterance.voice = voice;
         }
-        console.log(this.voicesOrigin);
-        speechSynthesis.speak(this.utterance);
 
-        this.utterance.onstart = () => {
+        speechSynthesis.speak(utterance);
+
+        utterance.onstart = () => {
             onStart();
         };
-        this.utterance.onend = () => {
+        utterance.onend = () => {
             onEnd();
         };
     }
+    // playSound(text: string, onStart: VoidFunction, onEnd: VoidFunction) {
+    //     speechSynthesis.cancel();
+
+    //     const selectedVoice = this.voicesEn[this.voiceEnIndex];
+    //     const voice =
+    //         this.voicesOrigin.find((item) => item?.name === selectedVoice?.name) ??
+    //         this.voicesOrigin[0];
+
+    //     this.utterance.lang = 'en-GB';
+    //     this.utterance.text = text;
+    //     this.utterance.rate = this.rate;
+    //     this.utterance.pitch = 1;
+
+    //     if (voice?.lang) {
+    //         this.utterance.voice = voice;
+    //         this.utterance.lang = voice.lang;
+    //     }
+
+    //     speechSynthesis.speak(this.utterance);
+
+    //     this.utterance.onstart = () => {
+    //         onStart();
+    //     };
+    //     this.utterance.onend = () => {
+    //         onEnd();
+    //     };
+    // }
 }
 
 export default new Store();
