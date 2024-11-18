@@ -96,7 +96,7 @@ export const Settings = (props: SettingsProps) => {
                 )}
 
                 {/* NOTE need to delete */}
-                <div>
+                {/* <div>
                     <p>{`typeof: ${typeof store.voicesOrigin}`}</p>
                     <p>{`isArray: ${Array.isArray(store.voicesOrigin)}`}</p>
                     <p>{`Length: ${store.voicesOrigin?.length}`}</p>
@@ -112,7 +112,7 @@ export const Settings = (props: SettingsProps) => {
                             </div>
                         );
                     })}
-                </div>
+                </div> */}
                 {/* ///////////// */}
             </div>
         </ClickOutside>
