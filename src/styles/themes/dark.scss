@@ -4,8 +4,12 @@
     --bg-sidebar: rgb(37 37 37);
     --bg-sidebar-hover: rgb(31 31 31);
     --bg-sidebar-active: rgb(142, 66, 0);
+    --bg-tab: #001d3f;
+    --bg-tab-active: rgb(82, 38, 0);
+    --bg-list: rgb(49, 49, 49);
 
-    --primary-color: rgb(224 224 224);
+    // --primary-color: rgb(224 224 224);
+    --primary-color: rgb(189, 189, 189);
 
     --box-shadow: rgba(147, 147, 147, 0.2);
 
@@ -16,7 +20,4 @@
 
     --color-logo-one: rgb(60, 60, 60);
     --color-logo-two: rgb(177, 177, 177);
-
-    --bg-tab: #001d3f;
-    --bg-tab-active: rgb(82, 38, 0);
 }

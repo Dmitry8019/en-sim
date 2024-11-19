@@ -29,7 +29,7 @@ enum SidebarSwitcher {
 
 const defaultSidebarSwitcher =
     (localStorage.getItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY) as SidebarSwitcher) ||
-    SidebarSwitcher.SHOW;
+    SidebarSwitcher.HIDE;
 
 interface SidebarProps {
     className?: string;
@@ -106,10 +106,7 @@ export const Sidebar = (props: SidebarProps) => {
                 setSidebarSwitchStatus(SidebarSwitcher.HIDE);
             }
             setTimeout(() => {
-                localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
-                if (isMobile) {
-                    localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, SidebarSwitcher.HIDE);
-                }
+                localStorage.clear();
                 window.location.reload();
             }, 500);
         }
