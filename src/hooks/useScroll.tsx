@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { LocationState } from '../components/TrainerPage/initialData';
+
 export const useScroll = (len: number) => {
-    const location = useLocation();
-    const initScrollPos: number = location.state?.scrollPosition ?? 0;
+    const { state: locationState }: { state: LocationState } = useLocation();
+    const initScrollPos: number = locationState?.scrollPosition ?? 0;
     const scrollPositionRef = useRef(initScrollPos);
     const [initialScrollPosition, setInitialScrollPosition] = useState(0);
 

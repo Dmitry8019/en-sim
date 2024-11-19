@@ -3,7 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 import { Navbar } from './components/Navbar/Navbar';
 import { Sidebar } from './components/Sidebar/Sidebar';
-import { AppTheme, STORAGE_KEY_THEME } from './types';
+import { STORAGE_KEY_THEME } from './const/localStorage';
+import { AppTheme } from './types';
 
 import './styles/index.scss';
 import './index.css';

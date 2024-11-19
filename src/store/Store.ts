@@ -1,3 +1,5 @@
+import { LOCAL_STORAGE_EN_INDEX } from '../const/localStorage';
+
 type StoreType = {
     voiceEnIndex: number;
     setVoiceEnIndex: (index: number) => void;
@@ -18,6 +20,23 @@ const isLocalKey = (key: string) => {
     }
 };
 
+const getPriority = (lang: string) => {
+    if (lang === 'en-GB' || lang === 'en_GB') return 1;
+    if (lang === 'en-US' || lang === 'en_US') return 2;
+    return 3;
+};
+
+const compareLangs = (a: SpeechSynthesisVoice, b: SpeechSynthesisVoice) => {
+    const priorityA = getPriority(a.lang);
+    const priorityB = getPriority(b.lang);
+
+    if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+    }
+
+    return a.lang > b.lang ? 1 : -1;
+};
+
 const getVoices = () => {
     return new Promise<SpeechSynthesisVoice[]>((resolve) => {
         let voices = speechSynthesis.getVoices();
@@ -36,7 +55,7 @@ class Store implements StoreType {
     rate = 1;
     voicesOrigin: SpeechSynthesisVoice[] = [];
     voicesEn: SpeechSynthesisVoice[] = [];
-    voiceEnIndex = isLocalKey('EnIndex');
+    voiceEnIndex = isLocalKey(LOCAL_STORAGE_EN_INDEX);
     utterance: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
 
     constructor() {
@@ -48,7 +67,7 @@ class Store implements StoreType {
     }
     setVoiceEnIndex(index: number) {
         this.voiceEnIndex = index;
-        localStorage.setItem('EnIndex', String(index));
+        localStorage.setItem(LOCAL_STORAGE_EN_INDEX, String(index));
     }
     private setVoicesOrigin(voices: SpeechSynthesisVoice[]) {
         this.voicesOrigin = voices;
@@ -64,7 +83,10 @@ class Store implements StoreType {
         if (voices.length < 1) {
             return;
         }
-        const voicesEn = voices.filter((item) => item.lang.substring(0, 2) === 'en');
+        const voicesEn = voices
+            .filter((item) => item.lang.substring(0, 2) === 'en')
+            .sort(compareLangs);
+
         this.setVoicesOrigin(voices);
         this.setVoicesEn(voicesEn);
     }
@@ -78,11 +100,13 @@ class Store implements StoreType {
         this.utterance.rate = this.rate;
         this.utterance.pitch = 1;
 
+        // NOTE: 'en-GB' or 'en_GB' mobile
+        // this.utterance.lang = 'en-GB';
+        //
+
         if (voice) {
             this.utterance.voice = voice;
             this.utterance.lang = voice.lang;
-        } else {
-            this.utterance.lang = 'en-GB';
         }
 
         speechSynthesis.speak(this.utterance);

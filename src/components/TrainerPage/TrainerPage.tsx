@@ -8,25 +8,19 @@ import { OptionSelectionPanel } from '../OptionSelectionPanel/OptionSelectionPan
 import { useGetLessonsQuery } from './lessons.query';
 import { Button, ThemeButton } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
-import { levels, options } from './initialData';
+import { levels, LocationState, options } from './initialData';
 import { useScroll } from '../../hooks/useScroll';
 
 import styles from './TrainerPage.module.scss';
 
-interface TrainerPageProps {
-    className?: string;
-}
-
-export const TrainerPage = (props: TrainerPageProps) => {
-    const { className } = props;
-
+export const TrainerPage = () => {
     const navigate = useNavigate();
-    const location = useLocation();
+    const { state: locationState }: { state: LocationState } = useLocation();
 
-    const ids = location.state?.id.split('_') ?? null;
+    const ids = locationState?.id?.split('_') ?? null;
     const [initialLevel, initialLesson] = ids ? [ids[0], Number(ids[1])] : [levels[0], 1];
     const initialOption =
-        options.find((item) => item.id === location.state?.selectedOption.id) ?? options[0];
+        options.find((item) => item.id === locationState?.selectedOption.id) ?? options[0];
 
     const [selectedLevel, setSelectedLevel] = useState(initialLevel);
     const [selectedOption, setSelectedOption] = useState(initialOption);
@@ -40,7 +34,7 @@ export const TrainerPage = (props: TrainerPageProps) => {
 
     return (
         <Page onScrollPosition={onScrollPosition} initialPositionScroll={initialScrollPosition}>
-            <div className={classNames(styles.trainerPage, className)}>
+            <div className={styles.trainerPage}>
                 <LevelSelectionPanel
                     selectedLevel={selectedLevel}
                     onSelectedLevel={(level) => {
