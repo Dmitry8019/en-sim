@@ -1,3 +1,9 @@
+export interface LocationState {
+    id?: string;
+    selectedOption: Option;
+    scrollPosition: number;
+}
+
 export interface Option {
     id: number;
     sound: boolean;

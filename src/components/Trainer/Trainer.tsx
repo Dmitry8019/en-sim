@@ -16,6 +16,7 @@ import VolumeIcon from '../../assets/icons/volume.svg?react';
 import SettingsIcon from '../../assets/icons/settings.svg?react';
 import store from '../../store/Store';
 import { Settings } from './Settings';
+import { LocationState } from '../TrainerPage/initialData';
 
 import styles from './Trainer.module.scss';
 
@@ -31,7 +32,7 @@ export const Trainer = (props: TrainerProps) => {
     const { className } = props;
 
     const { id } = useParams<Params>();
-    const { state } = useLocation();
+    const { state }: { state: LocationState } = useLocation();
     const navigate = useNavigate();
     store.initVoices();
 
