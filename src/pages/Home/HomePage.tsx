@@ -1,4 +1,6 @@
+import { Icon } from '../../components/Icon/Icon';
 import { Page } from '../../components/Page/Page';
+import HomeIcon from '../../assets/icons/homeIcon.svg?react';
 
 import styles from './HomePage.module.scss';
 
@@ -8,8 +10,9 @@ export const HomePage = () => {
             <p>Welcome to the</p>
             <p>English</p>
             <p>Simulator!</p>
-
-            <img className={styles.image} src='../src/assets/icons/background-es.jpg' alt='' />
+            <div className={styles.image}>
+                <Icon Svg={HomeIcon} />
+            </div>
 
             <p>Improve your English skills with our interactive exercises.</p>
             <div className={styles.largeText}>ES</div>

@@ -38,10 +38,13 @@ $text-shadow-light: rgba(29, 29, 29, 0.4);
     }
 
     .image {
-        display: flex;
-        max-width: 400px;
-        margin: 0 auto;
-        border-radius: 50%;
+        svg {
+            display: flex;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 50%;
+            fill: var(--bg-navbar);
+        }
 
         @media (max-width: 710px) {
             max-width: 100%;
