@@ -38,4 +38,8 @@
             fill: var(--bg-color);
         }
     }
+
+    .button {
+        box-shadow: 1px 2px 4px var(--home-text-shadow);
+    }
 }

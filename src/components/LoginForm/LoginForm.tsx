@@ -69,7 +69,12 @@ export const LoginForm = (props: LoginFormProps) => {
                         onClick={() => setShowPassword(!showPassword)}
                     />
                 </div>
-                <Button theme={ThemeButton.CLEAR} type='submit' disabled={disabled}>
+                <Button
+                    theme={ThemeButton.CLEAR}
+                    type='submit'
+                    disabled={disabled}
+                    className={styles.button}
+                >
                     Submit
                 </Button>
                 {isError && <div className={styles.error}>Invalid password or login</div>}

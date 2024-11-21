@@ -1,0 +1,78 @@
+$large-text-color: #a7a7a7;
+$text-shadow-color: #6f6f6f;
+$text-shadow-dark: rgba(29, 29, 29, 0.8);
+$text-shadow-light: rgba(29, 29, 29, 0.4);
+
+.homePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    p {
+        max-width: 80%;
+        margin: 0 auto;
+        font-weight: bold;
+        text-align: center;
+        font-size: 2em;
+        line-height: 1.3em;
+        color: var(--home-text-color);
+        text-shadow: 4px 8px 4px var(--home-text-shadow);
+
+        &:first-child {
+            margin: 20px auto;
+        }
+
+        &:nth-child(3) {
+            margin-bottom: 20px;
+        }
+
+        &:nth-child(2)::first-letter,
+        &:nth-child(3)::first-letter {
+            color: var(--bg-sidebar-active);
+            font-size: 130%;
+        }
+
+        &:nth-child(5) {
+            margin-top: 20px;
+        }
+    }
+
+    .image {
+        display: flex;
+        max-width: 400px;
+        margin: 0 auto;
+        border-radius: 50%;
+
+        @media (max-width: 710px) {
+            max-width: 100%;
+        }
+    }
+
+    .largeText {
+        width: 300px;
+        max-width: 400px;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        margin-top: 70px;
+        margin-bottom: 100px;
+        font-family: verdana;
+        font-size: 10em;
+        font-weight: bold;
+        border-radius: 8px;
+        color: $large-text-color;
+        background: var(--bg-sidebar-active);
+        text-shadow: 1px 1px 1px $text-shadow-color, 1px 2px 1px $text-shadow-color,
+            1px 3px 1px $text-shadow-color, 1px 4px 1px $text-shadow-color,
+            1px 5px 1px $text-shadow-color, 1px 6px 1px $text-shadow-color,
+            1px 7px 1px $text-shadow-color, 1px 8px 1px $text-shadow-color,
+            1px 9px 1px $text-shadow-color, 1px 10px 1px $text-shadow-color,
+            1px 18px 6px $text-shadow-dark, 1px 22px 10px $text-shadow-light,
+            1px 25px 35px $text-shadow-light, 1px 30px 60px $text-shadow-dark;
+    }
+
+    footer {
+        opacity: 0.5;
+        text-align: right;
+    }
+}

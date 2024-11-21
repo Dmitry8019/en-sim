@@ -56,6 +56,7 @@ $widthPanel: 400px;
             color: var(--primary-color);
             padding: 5px 30px;
             border-radius: 5px;
+            box-shadow: 1px 2px 4px var(--home-text-shadow);
         }
 
         &:last-child {
