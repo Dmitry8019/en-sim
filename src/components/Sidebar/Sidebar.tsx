@@ -156,12 +156,14 @@ export const Sidebar = (props: SidebarProps) => {
                                         <Button
                                             theme={ThemeButton.CLEAR}
                                             onClick={() => handleLogout(true)}
+                                            className={styles.button}
                                         >
                                             Yes
                                         </Button>
                                         <Button
                                             theme={ThemeButton.CLEAR}
                                             onClick={() => handleLogout(false)}
+                                            className={styles.button}
                                         >
                                             No
                                         </Button>

@@ -69,11 +69,19 @@
 @media (max-width: 710px) {
     .hideAuth {
         bottom: 50px;
-        left: -20px;
+        left: -100px;
+    }
+
+    .hideText {
+        margin-left: -160px;
     }
 }
 
 .hideText {
     opacity: 0;
     transform: scaleY(0);
+}
+
+.button {
+    box-shadow: 1px 2px 4px var(--home-text-shadow);
 }

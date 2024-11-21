@@ -1,6 +1,7 @@
 import App from '../../App';
 import { TrainerPage } from '../../components/TrainerPage/TrainerPage';
 import { Trainer } from '../../components/Trainer/Trainer';
+import { HomePage } from '../../pages/Home/HomePage';
 import {
     getRouteAbout,
     getRouteMain,
@@ -15,7 +16,7 @@ export const routeConfig = [
         children: [
             {
                 path: getRouteMain(),
-                element: <div>Home</div>,
+                element: <HomePage />,
             },
             {
                 path: getRouteAbout(),
