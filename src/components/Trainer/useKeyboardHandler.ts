@@ -1,29 +1,29 @@
 import { useCallback, useEffect } from 'react';
 
-import { TextAction } from './types';
+import { TouchAction } from './types';
 
-export const useKeyboardHandler = (callback: (textAction: TextAction) => void) => {
+export const useKeyboardHandler = (callback: (textAction: TouchAction) => void) => {
     const processKeyboardUp = useCallback(
         ({ code }: KeyboardEvent) => {
             switch (code) {
                 case 'Numpad8': {
-                    callback(TextAction.SHOW_EN_TEXT);
+                    callback(TouchAction.MOVING_UP);
                     break;
                 }
                 case 'Numpad2': {
-                    callback(TextAction.SHOW_RU_TEXT);
+                    callback(TouchAction.MOVING_DOWN);
                     break;
                 }
                 case 'Numpad6': {
-                    callback(TextAction.NEXT_TEXT);
+                    callback(TouchAction.MOVING_LEFT);
                     break;
                 }
                 case 'Numpad4': {
-                    callback(TextAction.PREV_TEXT);
+                    callback(TouchAction.MOVING_RIGHT);
                     break;
                 }
                 case 'Numpad5': {
-                    callback(TextAction.PLAYBACK);
+                    callback(TouchAction.START_ACTION);
                 }
             }
         },

@@ -1,7 +1,7 @@
-export enum TextAction {
-    NEXT_TEXT = 'nextText',
-    PREV_TEXT = 'prevText',
-    SHOW_EN_TEXT = 'showEnText',
-    SHOW_RU_TEXT = 'showRuText',
-    PLAYBACK = 'playback',
+export enum TouchAction {
+    MOVING_LEFT = 'movingLeft',
+    MOVING_RIGHT = 'movingRight',
+    MOVING_UP = 'movingUp',
+    MOVING_DOWN = 'movingDown',
+    START_ACTION = 'startAction',
 }

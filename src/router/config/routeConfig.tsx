@@ -2,6 +2,7 @@ import App from '../../App';
 import { TrainerPage } from '../../components/TrainerPage/TrainerPage';
 import { Trainer } from '../../components/Trainer/Trainer';
 import { HomePage } from '../../pages/Home/HomePage';
+import { AboutPage } from '../../pages/About/AboutPage';
 import {
     getRouteAbout,
     getRouteMain,
@@ -20,7 +21,7 @@ export const routeConfig = [
             },
             {
                 path: getRouteAbout(),
-                element: <div>About</div>,
+                element: <AboutPage />,
             },
             {
                 path: getRouteTrainer(),

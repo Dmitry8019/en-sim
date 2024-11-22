@@ -9,6 +9,9 @@ type StoreType = {
     voicesEn: SpeechSynthesisVoice[];
     initVoices: VoidFunction;
     utterance: SpeechSynthesisUtterance;
+
+    onSidebarSwitch: VoidFunction;
+    setCallbackForSidebarSwitch: (callback: VoidFunction) => void;
 };
 
 const isLocalKey = (key: string) => {
@@ -57,9 +60,14 @@ class Store implements StoreType {
     voicesEn: SpeechSynthesisVoice[] = [];
     voiceEnIndex = isLocalKey(LOCAL_STORAGE_EN_INDEX);
     utterance: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
+    onSidebarSwitch = () => {};
 
     constructor() {
         this.utterance = new SpeechSynthesisUtterance();
+    }
+
+    setCallbackForSidebarSwitch(callback: VoidFunction) {
+        this.onSidebarSwitch = callback;
     }
 
     setRate(rate: number) {
