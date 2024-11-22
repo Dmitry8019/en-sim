@@ -13,13 +13,18 @@ $text-shadow-light: rgba(29, 29, 29, 0.4);
         margin: 0 auto;
         font-weight: bold;
         text-align: center;
-        font-size: 2em;
+        font-size: 1.8em;
         line-height: 1.3em;
         color: var(--home-text-color);
         text-shadow: 4px 8px 4px var(--home-text-shadow);
 
         &:first-child {
-            margin: 20px auto;
+            margin-bottom: 10px;
+        }
+
+        &:nth-child(2),
+        &:nth-child(3) {
+            font-size: 2em;
         }
 
         &:nth-child(3) {

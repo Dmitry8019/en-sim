@@ -8,10 +8,9 @@ import { getRouteTrainer } from '../../const/router';
 import { Content } from './Content/Content';
 import { Loader } from '../Loader/Loader';
 import { useGetSentencesQuery } from './trainer.query';
-import { TouchPanel } from './TouchPanel';
 import { useKeyboardHandler } from './useKeyboardHandler';
 import { Icon } from '../Icon/Icon';
-import { TextAction } from './types';
+import { TouchAction } from './types';
 import VolumeIcon from '../../assets/icons/volume.svg?react';
 import SettingsIcon from '../../assets/icons/settings.svg?react';
 import store from '../../store/Store';
@@ -90,29 +89,29 @@ export const Trainer = (props: TrainerProps) => {
         setSentenceIndex(newIndex);
     };
 
-    const handleTextAction = (textAction: TextAction) => {
-        switch (textAction) {
-            case TextAction.SHOW_EN_TEXT: {
+    const handleTextAction = (action: TouchAction) => {
+        switch (action) {
+            case TouchAction.MOVING_UP: {
                 setShowEn(!showEn);
                 break;
             }
-            case TextAction.SHOW_RU_TEXT: {
+            case TouchAction.MOVING_DOWN: {
                 setShowRu(!showRu);
                 break;
             }
-            case TextAction.NEXT_TEXT: {
+            case TouchAction.MOVING_LEFT: {
                 handleNext();
                 setShowEn(state.selectedOption.en);
                 setShowRu(state.selectedOption.ru);
                 break;
             }
-            case TextAction.PREV_TEXT: {
+            case TouchAction.MOVING_RIGHT: {
                 handlePrev();
                 setShowEn(state.selectedOption.en);
                 setShowRu(state.selectedOption.ru);
                 break;
             }
-            case TextAction.PLAYBACK: {
+            case TouchAction.START_ACTION: {
                 playSound(sentences[sentenceIndex].en);
             }
         }
@@ -129,10 +128,7 @@ export const Trainer = (props: TrainerProps) => {
     }
 
     return (
-        <Page className={className}>
-            {window.matchMedia('(max-width: 710px)').matches && (
-                <TouchPanel onTextAction={handleTextAction} />
-            )}
+        <Page className={className} onTouchAction={handleTextAction}>
             <div className={styles.wrapper}>
                 <div className={styles.header}>
                     <p>{`Level: ${selectedLevel}`}</p>
@@ -191,14 +187,14 @@ export const Trainer = (props: TrainerProps) => {
                 {!window.matchMedia('(max-width: 710px)').matches && (
                     <>
                         <Button
-                            onClick={() => handleTextAction(TextAction.PREV_TEXT)}
+                            onClick={() => handleTextAction(TouchAction.MOVING_RIGHT)}
                             theme={ThemeButton.CLEAR}
                             className={styles.button}
                         >
                             Prev
                         </Button>
                         <Button
-                            onClick={() => handleTextAction(TextAction.NEXT_TEXT)}
+                            onClick={() => handleTextAction(TouchAction.MOVING_LEFT)}
                             theme={ThemeButton.CLEAR}
                             className={styles.button}
                         >

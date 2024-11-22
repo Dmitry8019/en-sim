@@ -1,6 +1,10 @@
 import { ReactNode, SyntheticEvent, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
+import { TouchHandler } from '../TouchHandler/TouchHandler';
+import { TouchAction } from '../Trainer/types';
+import store from '../../store/Store';
+
 import styles from './Page.module.scss';
 
 interface PageProps {
@@ -8,10 +12,19 @@ interface PageProps {
     children: ReactNode;
     onScrollPosition?: (value: number) => void;
     initialPositionScroll?: number;
+    disableTouchAction?: boolean;
+    onTouchAction?: (action: TouchAction) => void;
 }
 
 export const Page = (props: PageProps) => {
-    const { className, children, onScrollPosition, initialPositionScroll } = props;
+    const {
+        className,
+        children,
+        onScrollPosition,
+        initialPositionScroll,
+        disableTouchAction,
+        onTouchAction,
+    } = props;
     const scrollRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -27,13 +40,27 @@ export const Page = (props: PageProps) => {
         }
     };
 
+    const handleTouch = (action: TouchAction) => {
+        if (onTouchAction) {
+            onTouchAction(action);
+            return;
+        }
+        if (action === TouchAction.MOVING_RIGHT) {
+            if (!disableTouchAction) {
+                store.onSidebarSwitch();
+            }
+        }
+    };
+
     return (
-        <main
-            className={classNames(styles.page, className)}
-            onScroll={handleScroll}
-            ref={scrollRef}
-        >
-            {children}
-        </main>
+        <TouchHandler onTouchAction={handleTouch} disableTouchAction={disableTouchAction}>
+            <main
+                className={classNames(styles.page, className)}
+                onScroll={handleScroll}
+                ref={scrollRef}
+            >
+                {children}
+            </main>
+        </TouchHandler>
     );
 };

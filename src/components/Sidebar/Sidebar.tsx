@@ -12,13 +12,16 @@ import { sidebarItemsList } from './sidebarItemList';
 import { SidebarItem } from './SidebarItem';
 import { Button, ThemeButton } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
-import EnSimIcon from '../../../public/favicon.svg?react';
+import EnSimIcon from '../../assets/icons/favicon.svg?react';
 import LogoutIcon from '../../assets/icons/person-prohibited.svg?react';
 import { Modal } from '../Modals/Modal';
 import { ClickOutside } from '../../hooks/ClickOutside';
 import { FormLogin, LoginForm } from '../LoginForm/LoginForm';
 import { useLoginByUserNameMutation } from './loginByUserName.query';
 import { User } from './loginApi';
+import { TouchHandler } from '../TouchHandler/TouchHandler';
+import { TouchAction } from '../Trainer/types';
+import store from '../../store/Store';
 
 import styles from './Sidebar.module.scss';
 
@@ -90,6 +93,8 @@ export const Sidebar = (props: SidebarProps) => {
         localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, newStatus);
     });
 
+    useMemo(() => store.setCallbackForSidebarSwitch(sidebarSwitchHandler), []);
+
     useEffect(() => {
         const status = SidebarSwitcher.HIDE;
         if (window.matchMedia('(max-width: 710px)').matches) {
@@ -117,72 +122,82 @@ export const Sidebar = (props: SidebarProps) => {
         loginByUserName(formData);
     };
 
+    const handleTouch = (action: TouchAction) => {
+        if (action === TouchAction.MOVING_LEFT) {
+            sidebarSwitchHandler();
+        }
+    };
+
     return (
         <>
             <SidebarSwitchButton onToggle={sidebarSwitchHandler} />
             <aside
                 className={classNames(styles.sidebar, { [styles.collapsed]: !isBurger }, className)}
             >
-                <div className={styles.blockDev}>
-                    <div>{itemsList}</div>
-                    <div>
-                        <ClickOutside
-                            onShowElement={() => handleModal(false)}
-                            showElement={showModal}
-                        >
-                            <Button
-                                theme={ThemeButton.CLEAR}
-                                className={classNames(styles.auth, {
-                                    [styles.hideAuth]: !isBurger,
-                                })}
-                                onClick={() => handleModal(!showModal)}
+                <TouchHandler onTouchAction={handleTouch} disableTouchAction={showModal}>
+                    <div className={styles.blockDev}>
+                        <div>{itemsList}</div>
+                        <div>
+                            <ClickOutside
+                                onShowElement={() => handleModal(false)}
+                                showElement={showModal}
                             >
-                                <Icon Svg={isLogin ? EnSimIcon : LogoutIcon} />
-                                <p
-                                    className={classNames({
-                                        [styles.hideText]: !isBurger,
+                                <Button
+                                    theme={ThemeButton.CLEAR}
+                                    className={classNames(styles.auth, {
+                                        [styles.hideAuth]: !isBurger,
                                     })}
+                                    onClick={() => handleModal(!showModal)}
                                 >
-                                    {isLogin ? 'Logout' : 'Login'}
-                                </p>
-                            </Button>
-                            <Modal
-                                title={isLogin ? 'Logout' : 'Login'}
-                                text={isLogin ? 'Are you sure?' : ''}
-                                showConfirm={showModal}
+                                    <Icon Svg={isLogin ? EnSimIcon : LogoutIcon} />
+                                    <p
+                                        className={classNames({
+                                            [styles.hideText]: !isBurger,
+                                        })}
+                                    >
+                                        {isLogin ? 'Logout' : 'Login'}
+                                    </p>
+                                </Button>
+                                <Modal
+                                    title={isLogin ? 'Logout' : 'Login'}
+                                    text={isLogin ? 'Are you sure?' : ''}
+                                    showConfirm={showModal}
+                                >
+                                    {isLogin ? (
+                                        <>
+                                            <Button
+                                                theme={ThemeButton.CLEAR}
+                                                onClick={() => handleLogout(true)}
+                                                className={styles.button}
+                                            >
+                                                Yes
+                                            </Button>
+                                            <Button
+                                                theme={ThemeButton.CLEAR}
+                                                onClick={() => handleLogout(false)}
+                                                className={styles.button}
+                                            >
+                                                No
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <LoginForm
+                                            onLogin={handleLogin}
+                                            isError={isLoginByUserNameError}
+                                            isReset={showModal}
+                                            disabled={isLoginByUserNamePending}
+                                        />
+                                    )}
+                                </Modal>
+                            </ClickOutside>
+                            <div
+                                className={classNames(styles.dev, { [styles.hideText]: !isBurger })}
                             >
-                                {isLogin ? (
-                                    <>
-                                        <Button
-                                            theme={ThemeButton.CLEAR}
-                                            onClick={() => handleLogout(true)}
-                                            className={styles.button}
-                                        >
-                                            Yes
-                                        </Button>
-                                        <Button
-                                            theme={ThemeButton.CLEAR}
-                                            onClick={() => handleLogout(false)}
-                                            className={styles.button}
-                                        >
-                                            No
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <LoginForm
-                                        onLogin={handleLogin}
-                                        isError={isLoginByUserNameError}
-                                        isReset={showModal}
-                                        disabled={isLoginByUserNamePending}
-                                    />
-                                )}
-                            </Modal>
-                        </ClickOutside>
-                        <div className={classNames(styles.dev, { [styles.hideText]: !isBurger })}>
-                            &#169; 2025 D.A.Dadychyn
+                                &#169; 2025 D.A.Dadychyn
+                            </div>
                         </div>
                     </div>
-                </div>
+                </TouchHandler>
             </aside>
         </>
     );
