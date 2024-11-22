@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from '../Icon/Icon';
 import { AppTheme } from '../../types';
 import { Button, ThemeButton } from '../Button/Button';
 import { ClickOutside } from '../../hooks/ClickOutside';
+import store from '../../store/Store';
+import { TouchHandler } from '../TouchHandler/TouchHandler';
+import { TouchAction } from '../Trainer/types';
 
 import SettingIcon from '../../assets/icons/settings.svg?react';
 
@@ -20,6 +23,17 @@ export const RightSidebar = (props: RightSidebarProps) => {
     const { className, onTheme, theme } = props;
 
     const [hideRightSidebar, setHideRightSidebar] = useState(true);
+
+    const handleTouch = (action: TouchAction) => {
+        if (action === TouchAction.MOVING_RIGHT) {
+            setHideRightSidebar(!hideRightSidebar);
+        }
+    };
+
+    useMemo(
+        () => store.setCallbackForRightSidebar(() => setHideRightSidebar(!hideRightSidebar)),
+        [],
+    );
 
     return (
         <ClickOutside
@@ -37,25 +51,27 @@ export const RightSidebar = (props: RightSidebarProps) => {
             </Button>
 
             <div className={classNames(styles.panel, { [styles.hidePanel]: hideRightSidebar })}>
-                <div className={styles.wrapper}>
-                    <div className={styles.label}>Theme</div>
-                    <div
-                        className={classNames(styles.text, {
-                            [styles.activeText]: theme === AppTheme.LIGHT,
-                        })}
-                        onClick={() => onTheme(AppTheme.LIGHT)}
-                    >
-                        Light
+                <TouchHandler onTouchAction={handleTouch}>
+                    <div className={styles.wrapper}>
+                        <div className={styles.label}>Theme</div>
+                        <div
+                            className={classNames(styles.text, {
+                                [styles.activeText]: theme === AppTheme.LIGHT,
+                            })}
+                            onClick={() => onTheme(AppTheme.LIGHT)}
+                        >
+                            Light
+                        </div>
+                        <div
+                            className={classNames(styles.text, {
+                                [styles.activeText]: theme === AppTheme.DARK,
+                            })}
+                            onClick={() => onTheme(AppTheme.DARK)}
+                        >
+                            Dark
+                        </div>
                     </div>
-                    <div
-                        className={classNames(styles.text, {
-                            [styles.activeText]: theme === AppTheme.DARK,
-                        })}
-                        onClick={() => onTheme(AppTheme.DARK)}
-                    >
-                        Dark
-                    </div>
-                </div>
+                </TouchHandler>
             </div>
         </ClickOutside>
     );
