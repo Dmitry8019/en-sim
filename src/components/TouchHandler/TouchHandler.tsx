@@ -8,6 +8,7 @@ interface TouchHandlerProps {
     children: ReactNode;
     onTouchAction: (action: TouchAction) => void;
     disableTouchAction?: boolean;
+    isPreventDefault?: boolean;
 }
 
 let startX = 0;
@@ -16,7 +17,7 @@ let startY = 0;
 let endY = 0;
 
 export const TouchHandler = (props: TouchHandlerProps) => {
-    const { onTouchAction, children, disableTouchAction } = props;
+    const { onTouchAction, children, disableTouchAction, isPreventDefault } = props;
     const elementRef = useRef<HTMLDivElement>(null);
 
     const handleStart = (e: TouchEvent) => {
@@ -49,12 +50,13 @@ export const TouchHandler = (props: TouchHandlerProps) => {
                 return onTouchAction(TouchAction.MOVING_UP);
             }
             if (!direction && startY < endY) {
-                // e.preventDefault();
-                e.stopPropagation();
+                if (isPreventDefault) {
+                    e.preventDefault();
+                }
                 onTouchAction(TouchAction.MOVING_DOWN);
             }
         },
-        [onTouchAction],
+        [isPreventDefault, onTouchAction],
     );
 
     const handleMove = (e: TouchEvent) => {

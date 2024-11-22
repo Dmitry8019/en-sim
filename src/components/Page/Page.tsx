@@ -50,10 +50,19 @@ export const Page = (props: PageProps) => {
                 store.onSidebarSwitch();
             }
         }
+        if (action === TouchAction.MOVING_LEFT) {
+            if (!disableTouchAction) {
+                store.onRightSidebar();
+            }
+        }
     };
 
     return (
-        <TouchHandler onTouchAction={handleTouch} disableTouchAction={disableTouchAction}>
+        <TouchHandler
+            onTouchAction={handleTouch}
+            disableTouchAction={disableTouchAction}
+            isPreventDefault={Boolean(onTouchAction)}
+        >
             <main
                 className={classNames(styles.page, className)}
                 onScroll={handleScroll}
