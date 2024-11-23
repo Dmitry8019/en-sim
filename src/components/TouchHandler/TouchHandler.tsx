@@ -46,10 +46,12 @@ export const TouchHandler = (props: TouchHandlerProps) => {
         const wayY = Math.abs(endY - startY);
         const direction = wayX > wayY;
 
+        if (nodesRef?.current && isTarget.current) {
+            return;
+        }
+
         if (startX === endX && startY === endY) {
-            if (!isTarget.current) {
-                onTouchAction(TouchAction.START_ACTION);
-            }
+            onTouchAction(TouchAction.START_ACTION);
         }
         if (direction && startX < endX) {
             return onTouchAction(TouchAction.MOVING_RIGHT);
@@ -64,7 +66,7 @@ export const TouchHandler = (props: TouchHandlerProps) => {
         if (!direction && startY < endY) {
             onTouchAction(TouchAction.MOVING_DOWN);
         }
-    }, [onTouchAction]);
+    }, [nodesRef, onTouchAction]);
 
     const handleMove = (e: TouchEvent) => {
         endX = e.changedTouches[0].clientX;
