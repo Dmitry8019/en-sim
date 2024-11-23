@@ -21,7 +21,7 @@ import { useLoginByUserNameMutation } from './loginByUserName.query';
 import { User } from './loginApi';
 import { TouchHandler } from '../TouchHandler/TouchHandler';
 import { TouchAction } from '../Trainer/types';
-import store from '../../store/Store';
+import { sidebarSwitchState } from '../../store/sidebar-switch-state';
 
 import styles from './Sidebar.module.scss';
 
@@ -93,7 +93,7 @@ export const Sidebar = (props: SidebarProps) => {
         localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, newStatus);
     });
 
-    useMemo(() => store.setCallbackForSidebarSwitch(sidebarSwitchHandler), []);
+    sidebarSwitchState.shareSidebarSwitchFun(sidebarSwitchHandler);
 
     useEffect(() => {
         const status = SidebarSwitcher.HIDE;

@@ -3,7 +3,8 @@ import classNames from 'classnames';
 
 import { TouchHandler } from '../TouchHandler/TouchHandler';
 import { TouchAction } from '../Trainer/types';
-import store from '../../store/Store';
+import { sidebarSwitchState } from '../../store/sidebar-switch-state';
+import { rightSidebarSwitchState } from '../../store/right-sidebar-switch-state';
 
 import styles from './Page.module.scss';
 
@@ -49,12 +50,12 @@ export const Page = (props: PageProps) => {
         }
         if (action === TouchAction.MOVING_RIGHT) {
             if (!disableTouchAction) {
-                store.onSidebarSwitch();
+                sidebarSwitchState.toggleSidebar?.();
             }
         }
         if (action === TouchAction.MOVING_LEFT) {
             if (!disableTouchAction) {
-                store.onRightSidebar();
+                rightSidebarSwitchState.toggleRightSidebar?.();
             }
         }
     };

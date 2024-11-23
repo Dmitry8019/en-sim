@@ -1,13 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from '../Icon/Icon';
 import { AppTheme } from '../../types';
 import { Button, ThemeButton } from '../Button/Button';
 import { ClickOutside } from '../../hooks/ClickOutside';
-import store from '../../store/Store';
 import { TouchHandler } from '../TouchHandler/TouchHandler';
 import { TouchAction } from '../Trainer/types';
+import { rightSidebarSwitchState } from '../../store/right-sidebar-switch-state';
 
 import SettingIcon from '../../assets/icons/settings.svg?react';
 
@@ -30,9 +30,8 @@ export const RightSidebar = (props: RightSidebarProps) => {
         }
     };
 
-    useMemo(
-        () => store.setCallbackForRightSidebar(() => setHideRightSidebar(!hideRightSidebar)),
-        [],
+    rightSidebarSwitchState.shareRightSidebarSwitchFun(() =>
+        setHideRightSidebar(!hideRightSidebar),
     );
 
     return (
