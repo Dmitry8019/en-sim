@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import store from '../../store/Store';
 import { Button, ThemeButton } from '../Button/Button';
 import { ClickOutside } from '../../hooks/ClickOutside';
+import { TouchHandler } from '../TouchHandler/TouchHandler';
+import { TouchAction } from './types';
 
 import styles from './Settings.module.scss';
 
@@ -39,6 +41,12 @@ export const Settings = (props: SettingsProps) => {
         store.setRate(1);
     };
 
+    const handleTouch = (action: TouchAction) => {
+        if (action === TouchAction.MOVING_RIGHT) {
+            onShowSettings();
+        }
+    };
+
     return (
         <ClickOutside
             className={className}
@@ -46,55 +54,49 @@ export const Settings = (props: SettingsProps) => {
             showElement={showSettings}
         >
             {children}
-            <div className={classNames(styles.settings, { [styles.hideSettings]: !showSettings })}>
-                <div className={styles.wrapper}>
-                    <div className={styles.label}>Speed</div>
-                    <div className={styles.speed}>
-                        <Button
-                            theme={ThemeButton.CLEAR}
-                            className={styles.button}
-                            onClick={() => handleRate(-0.1)}
-                        >
-                            -
-                        </Button>
-                        <Button
-                            theme={ThemeButton.CLEAR}
-                            className={styles.button}
-                            onClick={resetRate}
-                        >
-                            {rate.toFixed(1)}
-                        </Button>
-                        <Button
-                            theme={ThemeButton.CLEAR}
-                            className={styles.button}
-                            onClick={() => handleRate(0.1)}
-                        >
-                            +
-                        </Button>
-                    </div>
-                </div>
-                {store.voicesEn.length > 0 && (
+            <TouchHandler onTouchAction={handleTouch}>
+                <div
+                    className={classNames(styles.settings, {
+                        [styles.hideSettings]: !showSettings,
+                    })}
+                >
                     <div className={styles.wrapper}>
-                        <div className={styles.label}>Voices</div>
-                        <div className={styles.wrapperVoices}>
-                            {store.voicesEn.map((item, index) => {
-                                return (
-                                    <div
-                                        tabIndex={0}
-                                        key={item.name}
-                                        onClick={() => handleVoice(index)}
-                                        className={classNames(styles.voice, {
-                                            [styles.activeVoice]: activeVoice === index,
-                                        })}
-                                    >
-                                        {item.name}
-                                    </div>
-                                );
-                            })}
+                        <div className={styles.label}>Speed</div>
+                        <div className={styles.speed}>
+                            <Button theme={ThemeButton.CLEAR} onClick={() => handleRate(-0.1)}>
+                                <div className={styles.arrowLeft} />
+                            </Button>
+                            <Button theme={ThemeButton.CLEAR} onClick={resetRate}>
+                                {rate.toFixed(1)}
+                            </Button>
+                            <Button theme={ThemeButton.CLEAR} onClick={() => handleRate(0.1)}>
+                                <div className={styles.arrowRight} />
+                            </Button>
                         </div>
                     </div>
-                )}
-            </div>
+                    {store.voicesEn.length > 0 && (
+                        <div className={styles.wrapper}>
+                            <div className={styles.label}>Voices</div>
+                            <div className={styles.wrapperVoices}>
+                                {store.voicesEn.map((item, index) => {
+                                    return (
+                                        <div
+                                            tabIndex={0}
+                                            key={item.name}
+                                            onClick={() => handleVoice(index)}
+                                            className={classNames(styles.voice, {
+                                                [styles.activeVoice]: activeVoice === index,
+                                            })}
+                                        >
+                                            {item.name}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </TouchHandler>
         </ClickOutside>
     );
 };

@@ -12,7 +12,7 @@ import { useKeyboardHandler } from './useKeyboardHandler';
 import { Icon } from '../Icon/Icon';
 import { TouchAction } from './types';
 import VolumeIcon from '../../assets/icons/volume.svg?react';
-import SettingsIcon from '../../assets/icons/settings.svg?react';
+import SettingsIcon from '../../assets/icons/settings-trainer.svg?react';
 import store from '../../store/Store';
 import { Settings } from './Settings';
 import { LocationState } from '../TrainerPage/initialData';
@@ -171,7 +171,7 @@ export const Trainer = (props: TrainerProps) => {
                     >
                         <Button
                             theme={ThemeButton.CLEAR}
-                            className={styles.button}
+                            className={classNames(styles.button, styles.settingIcon)}
                             onClick={() => setShowSettings(!showSettings)}
                         >
                             <Icon Svg={SettingsIcon} />

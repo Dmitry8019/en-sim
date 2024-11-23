@@ -24,7 +24,10 @@
 
 .wrapperSettings {
     display: flex;
-    gap: 8px;
+
+    .settingIcon {
+        margin-right: 8px;
+    }
 }
 
 .button {

@@ -51,12 +51,28 @@ $widthPanel: 400px;
             padding: 10px 20px;
         }
 
-        .button {
+        button {
             background: var(--bg-tab);
             color: var(--primary-color);
-            padding: 5px 30px;
-            border-radius: 5px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 50%;
             box-shadow: 1px 2px 4px var(--home-text-shadow);
+        }
+
+        .arrowLeft,
+        .arrowRight {
+            padding: 3px;
+            margin: 3px 4px;
+            border: 0 solid var(--primary-color);
+            border-width: 3px 3px 0 0;
+            border-radius: 2px;
+
+            transform: rotate(-135deg);
+        }
+
+        .arrowRight {
+            transform: rotate(45deg);
         }
 
         &:last-child {
