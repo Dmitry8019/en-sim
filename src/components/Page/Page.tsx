@@ -14,6 +14,7 @@ interface PageProps {
     initialPositionScroll?: number;
     disableTouchAction?: boolean;
     onTouchAction?: (action: TouchAction) => void;
+    nodesRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const Page = (props: PageProps) => {
@@ -24,6 +25,7 @@ export const Page = (props: PageProps) => {
         initialPositionScroll,
         disableTouchAction,
         onTouchAction,
+        nodesRef,
     } = props;
     const scrollRef = useRef<HTMLElement>(null);
 
@@ -61,7 +63,7 @@ export const Page = (props: PageProps) => {
         <TouchHandler
             onTouchAction={handleTouch}
             disableTouchAction={disableTouchAction}
-            isPreventDefault={Boolean(onTouchAction)}
+            nodesRef={nodesRef}
         >
             <main
                 className={classNames(styles.page, className)}

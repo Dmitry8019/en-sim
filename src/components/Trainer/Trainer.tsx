@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -40,6 +40,7 @@ export const Trainer = (props: TrainerProps) => {
     const [showRu, setShowRu] = useState<boolean>(state?.selectedOption.ru);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const trainerRef = useRef<HTMLDivElement>(null);
 
     const [selectedLevel, selectedLesson] = id?.split('_') ?? ['A0, 1'];
 
@@ -128,80 +129,84 @@ export const Trainer = (props: TrainerProps) => {
     }
 
     return (
-        <Page className={className} onTouchAction={handleTextAction}>
-            <div className={styles.wrapper}>
-                <div className={styles.header}>
-                    <p>{`Level: ${selectedLevel}`}</p>
-                    <p>{`Lesson: ${selectedLesson}`}</p>
+        <Page className={className} onTouchAction={handleTextAction} nodesRef={trainerRef}>
+            <div ref={trainerRef}>
+                <div className={styles.wrapper}>
+                    <div className={styles.header}>
+                        <p>{`Level: ${selectedLevel}`}</p>
+                        <p>{`Lesson: ${selectedLesson}`}</p>
+                    </div>
+                    <p>{`${sentenceIndex + 1}${' / '}${sentences.length}`}</p>
                 </div>
-                <p>{`${sentenceIndex + 1}${' / '}${sentences.length}`}</p>
-            </div>
-            <Content
-                sentence={sentences[sentenceIndex].en}
-                transcription={sentences[sentenceIndex].transcription}
-                showText={showEn}
-                onShowText={() => setShowEn(!showEn)}
-                onPlayback={(text: string) => {
-                    playSound(text);
-                }}
-            />
-            <Content
-                sentence={sentences[sentenceIndex].ru}
-                showText={showRu}
-                onShowText={() => setShowRu(!showRu)}
-            />
-            <div className={styles.footer}>
-                <Button
-                    onClick={() => {
-                        navigate(getRouteTrainer(), {
-                            state: { id, ...state },
-                        });
+                <Content
+                    sentence={sentences[sentenceIndex].en}
+                    transcription={sentences[sentenceIndex].transcription}
+                    showText={showEn}
+                    onShowText={() => setShowEn(!showEn)}
+                    onPlayback={(text: string) => {
+                        playSound(text);
                     }}
-                    theme={ThemeButton.CLEAR}
-                    className={styles.button}
-                >
-                    Exit
-                </Button>
-                <Settings
-                    onShowSettings={() => setShowSettings(false)}
-                    showSettings={showSettings}
-                    className={styles.wrapperSettings}
-                >
-                    <Button
-                        theme={ThemeButton.CLEAR}
-                        className={styles.button}
-                        onClick={() => setShowSettings(!showSettings)}
-                    >
-                        <Icon Svg={SettingsIcon} />
-                    </Button>
+                />
+                <Content
+                    sentence={sentences[sentenceIndex].ru}
+                    showText={showRu}
+                    onShowText={() => setShowRu(!showRu)}
+                />
+                <div className={styles.footer}>
                     <Button
                         onClick={() => {
-                            playSound(sentences[sentenceIndex].en);
+                            navigate(getRouteTrainer(), {
+                                state: { id, ...state },
+                            });
                         }}
                         theme={ThemeButton.CLEAR}
-                        className={classNames(styles.button, { [styles.buttonActive]: isPlaying })}
+                        className={styles.button}
                     >
-                        <Icon Svg={VolumeIcon} />
+                        Exit
                     </Button>
-                </Settings>
-                {!window.matchMedia('(max-width: 710px)').matches && (
-                    <>
+                    <Settings
+                        onShowSettings={() => setShowSettings(false)}
+                        showSettings={showSettings}
+                        className={styles.wrapperSettings}
+                    >
                         <Button
-                            onClick={() => handleTextAction(TouchAction.MOVING_RIGHT)}
                             theme={ThemeButton.CLEAR}
                             className={styles.button}
+                            onClick={() => setShowSettings(!showSettings)}
                         >
-                            Prev
+                            <Icon Svg={SettingsIcon} />
                         </Button>
                         <Button
-                            onClick={() => handleTextAction(TouchAction.MOVING_LEFT)}
+                            onClick={() => {
+                                playSound(sentences[sentenceIndex].en);
+                            }}
                             theme={ThemeButton.CLEAR}
-                            className={styles.button}
+                            className={classNames(styles.button, {
+                                [styles.buttonActive]: isPlaying,
+                            })}
                         >
-                            Next
+                            <Icon Svg={VolumeIcon} />
                         </Button>
-                    </>
-                )}
+                    </Settings>
+                    {!window.matchMedia('(max-width: 710px)').matches && (
+                        <>
+                            <Button
+                                onClick={() => handleTextAction(TouchAction.MOVING_RIGHT)}
+                                theme={ThemeButton.CLEAR}
+                                className={styles.button}
+                            >
+                                Prev
+                            </Button>
+                            <Button
+                                onClick={() => handleTextAction(TouchAction.MOVING_LEFT)}
+                                theme={ThemeButton.CLEAR}
+                                className={styles.button}
+                            >
+                                Next
+                            </Button>
+                        </>
+                    )}
+                </div>
             </div>
         </Page>
     );

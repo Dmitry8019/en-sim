@@ -8,7 +8,7 @@ interface TouchHandlerProps {
     children: ReactNode;
     onTouchAction: (action: TouchAction) => void;
     disableTouchAction?: boolean;
-    isPreventDefault?: boolean;
+    nodesRef?: React.RefObject<HTMLDivElement>;
 }
 
 let startX = 0;
@@ -17,47 +17,52 @@ let startY = 0;
 let endY = 0;
 
 export const TouchHandler = (props: TouchHandlerProps) => {
-    const { onTouchAction, children, disableTouchAction, isPreventDefault } = props;
+    const { onTouchAction, children, disableTouchAction, nodesRef } = props;
     const elementRef = useRef<HTMLDivElement>(null);
+    const isTarget = useRef(false);
 
-    const handleStart = (e: TouchEvent) => {
-        const clientX = e.changedTouches[0].clientX;
-        const clientY = e.changedTouches[0].clientY;
-        startX = clientX;
-        endX = clientX;
-        startY = clientY;
-        endY = clientY;
-    };
-
-    const handleEnd = useCallback(
+    const handleStart = useCallback(
         (e: TouchEvent) => {
-            const wayX = Math.abs(endX - startX);
-            const wayY = Math.abs(endY - startY);
-            const direction = wayX > wayY;
-
-            if (startX === endX && startY === endY) {
-                //
+            const target = e.target as HTMLElement;
+            isTarget.current = Boolean(nodesRef?.current?.contains(target));
+            if (!isTarget.current) {
+                e.preventDefault();
             }
 
-            if (direction && startX < endX) {
-                return onTouchAction(TouchAction.MOVING_RIGHT);
-            }
-            if (direction && startX > endX) {
-                return onTouchAction(TouchAction.MOVING_LEFT);
-            }
-
-            if (!direction && startY > endY) {
-                return onTouchAction(TouchAction.MOVING_UP);
-            }
-            if (!direction && startY < endY) {
-                if (isPreventDefault) {
-                    e.preventDefault();
-                }
-                onTouchAction(TouchAction.MOVING_DOWN);
-            }
+            const clientX = e.changedTouches[0].clientX;
+            const clientY = e.changedTouches[0].clientY;
+            startX = clientX;
+            endX = clientX;
+            startY = clientY;
+            endY = clientY;
         },
-        [isPreventDefault, onTouchAction],
+        [nodesRef],
     );
+
+    const handleEnd = useCallback(() => {
+        const wayX = Math.abs(endX - startX);
+        const wayY = Math.abs(endY - startY);
+        const direction = wayX > wayY;
+
+        if (startX === endX && startY === endY) {
+            if (!isTarget.current) {
+                onTouchAction(TouchAction.START_ACTION);
+            }
+        }
+        if (direction && startX < endX) {
+            return onTouchAction(TouchAction.MOVING_RIGHT);
+        }
+        if (direction && startX > endX) {
+            return onTouchAction(TouchAction.MOVING_LEFT);
+        }
+
+        if (!direction && startY > endY) {
+            return onTouchAction(TouchAction.MOVING_UP);
+        }
+        if (!direction && startY < endY) {
+            onTouchAction(TouchAction.MOVING_DOWN);
+        }
+    }, [onTouchAction]);
 
     const handleMove = (e: TouchEvent) => {
         endX = e.changedTouches[0].clientX;
@@ -78,7 +83,7 @@ export const TouchHandler = (props: TouchHandlerProps) => {
             element.removeEventListener('touchend', handleEnd, false);
             element.removeEventListener('touchmove', handleMove, false);
         };
-    }, [disableTouchAction, handleEnd]);
+    }, [disableTouchAction, handleEnd, handleStart]);
 
     return (
         <div className={styles.touchHandler} ref={elementRef}>
