@@ -24,7 +24,9 @@ export const TouchHandler = (props: TouchHandlerProps) => {
     const handleStart = useCallback(
         (e: TouchEvent) => {
             const target = e.target as HTMLElement;
-            isTarget.current = Boolean(nodesRef?.current?.contains(target));
+            isTarget.current = nodesRef?.current
+                ? Boolean(nodesRef?.current?.contains(target))
+                : true;
             if (!isTarget.current) {
                 e.preventDefault();
             }
