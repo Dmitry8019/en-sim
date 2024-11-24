@@ -42,7 +42,14 @@ export const Sidebar = (props: SidebarProps) => {
     const { className } = props;
 
     const [showModal, setShowModal] = useState(false);
+    const [sidebarSwitchStatus, setSidebarSwitchStatus] =
+        useState<SidebarSwitcher>(defaultSidebarSwitcher);
+
+    const isSidebarVisible = sidebarSwitchStatus === SidebarSwitcher.SHOW;
     const isLogin = Boolean(localStorage.getItem(USER_LOCAL_STORAGE_KEY));
+    const title = isLogin ? 'Logout' : 'Login';
+    const isMobile = window.matchMedia('(max-width: 710px)').matches;
+    const location = useLocation();
 
     const handleModal = (value: boolean) => {
         setShowModal(value);
@@ -50,21 +57,22 @@ export const Sidebar = (props: SidebarProps) => {
     };
 
     const saveAuth = (auth: User) => {
-        const isMobile = window.matchMedia('(max-width: 710px)').matches;
         handleModal(false);
+
         if (isMobile) {
             setSidebarSwitchStatus(SidebarSwitcher.HIDE);
         }
+
         setTimeout(() => {
             if (isMobile) {
                 localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, SidebarSwitcher.HIDE);
             }
+
             localStorage.setItem(USER_LOCAL_STORAGE_KEY, JSON.stringify(auth));
             window.location.reload();
         }, 500);
     };
 
-    const location = useLocation();
     const {
         loginByUserName,
         isLoginByUserNameError,
@@ -72,23 +80,16 @@ export const Sidebar = (props: SidebarProps) => {
         isLoginByUserNamePending,
     } = useLoginByUserNameMutation(saveAuth);
 
-    const [sidebarSwitchStatus, setSidebarSwitchStatus] =
-        useState<SidebarSwitcher>(defaultSidebarSwitcher);
-    const isBurger = sidebarSwitchStatus === SidebarSwitcher.SHOW;
-
     const itemsList = useMemo(
         () =>
             sidebarItemsList.map((item) => (
-                <SidebarItem item={item} collapsed={isBurger} key={item.path} />
+                <SidebarItem item={item} collapsed={isSidebarVisible} key={item.path} />
             )),
-        [isBurger],
+        [isSidebarVisible],
     );
 
     const sidebarSwitchHandler = useEvent(() => {
-        const newStatus =
-            sidebarSwitchStatus === SidebarSwitcher.SHOW
-                ? SidebarSwitcher.HIDE
-                : SidebarSwitcher.SHOW;
+        const newStatus = isSidebarVisible ? SidebarSwitcher.HIDE : SidebarSwitcher.SHOW;
         setSidebarSwitchStatus(newStatus);
         localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, newStatus);
     });
@@ -97,16 +98,14 @@ export const Sidebar = (props: SidebarProps) => {
 
     useEffect(() => {
         const status = SidebarSwitcher.HIDE;
-        if (window.matchMedia('(max-width: 710px)').matches) {
+        if (isMobile) {
             setSidebarSwitchStatus(status);
             localStorage.setItem(LOCAL_STORAGE_SIDEBAR_SWITCHER_KEY, status);
         }
-    }, [location]);
+    }, [location, isMobile]);
 
     const handleLogout = (value: boolean) => {
-        const isMobile = window.matchMedia('(max-width: 710px)').matches;
         if (value) {
-            handleModal(false);
             if (isMobile) {
                 setSidebarSwitchStatus(SidebarSwitcher.HIDE);
             }
@@ -123,7 +122,11 @@ export const Sidebar = (props: SidebarProps) => {
     };
 
     const handleTouch = (action: TouchAction) => {
-        if (action === TouchAction.MOVING_LEFT) {
+        if (action === TouchAction.MOVING_LEFT && isSidebarVisible) {
+            sidebarSwitchHandler();
+        }
+
+        if (action === TouchAction.MOVING_RIGHT && !isSidebarVisible) {
             sidebarSwitchHandler();
         }
     };
@@ -132,10 +135,14 @@ export const Sidebar = (props: SidebarProps) => {
         <>
             <SidebarSwitchButton onToggle={sidebarSwitchHandler} />
             <aside
-                className={classNames(styles.sidebar, { [styles.collapsed]: !isBurger }, className)}
+                className={classNames(
+                    styles.sidebar,
+                    { [styles.collapsed]: !isSidebarVisible },
+                    className,
+                )}
             >
                 <TouchHandler onTouchAction={handleTouch} disableTouchAction={showModal}>
-                    <div className={styles.blockDev}>
+                    <div className={styles.wrapper}>
                         <div>{itemsList}</div>
                         <div>
                             <ClickOutside
@@ -145,21 +152,21 @@ export const Sidebar = (props: SidebarProps) => {
                                 <Button
                                     theme={ThemeButton.CLEAR}
                                     className={classNames(styles.auth, {
-                                        [styles.hideAuth]: !isBurger,
+                                        [styles.hideAuth]: !isSidebarVisible,
                                     })}
                                     onClick={() => handleModal(!showModal)}
                                 >
                                     <Icon Svg={isLogin ? EnSimIcon : LogoutIcon} />
                                     <p
                                         className={classNames({
-                                            [styles.hideText]: !isBurger,
+                                            [styles.hideText]: !isSidebarVisible,
                                         })}
                                     >
-                                        {isLogin ? 'Logout' : 'Login'}
+                                        {title}
                                     </p>
                                 </Button>
                                 <Modal
-                                    title={isLogin ? 'Logout' : 'Login'}
+                                    title={title}
                                     text={isLogin ? 'Are you sure?' : ''}
                                     showConfirm={showModal}
                                 >
@@ -191,7 +198,9 @@ export const Sidebar = (props: SidebarProps) => {
                                 </Modal>
                             </ClickOutside>
                             <div
-                                className={classNames(styles.dev, { [styles.hideText]: !isBurger })}
+                                className={classNames(styles.copyright, {
+                                    [styles.hideText]: !isSidebarVisible,
+                                })}
                             >
                                 &#169; 2025 D.A.Dadychyn
                             </div>

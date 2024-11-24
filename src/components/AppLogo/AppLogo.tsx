@@ -8,5 +8,5 @@ interface AppNameProps {
 
 export const AppLogo = (props: AppNameProps) => {
     const { className } = props;
-    return <div className={classNames(styles.text, {}, [className])}>English Simulator</div>;
+    return <div className={classNames(styles.text, className)}>English Simulator</div>;
 };

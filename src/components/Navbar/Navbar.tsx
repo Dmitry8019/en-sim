@@ -14,7 +14,7 @@ export const Navbar = (props: NavbarProps) => {
 
     return (
         <div className={styles.navbar}>
-            <AppLogo className={styles.logoPosition} />
+            <AppLogo className={styles.logo} />
             <RightSidebar theme={theme} onTheme={onTheme} />
         </div>
     );
