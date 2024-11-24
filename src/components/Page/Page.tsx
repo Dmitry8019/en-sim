@@ -48,13 +48,13 @@ export const Page = (props: PageProps) => {
             onTouchAction(action);
             return;
         }
-        if (action === TouchAction.MOVING_RIGHT) {
-            if (!disableTouchAction) {
+
+        if (!disableTouchAction) {
+            if (action === TouchAction.MOVING_RIGHT) {
                 sidebarSwitchState.toggleSidebar?.();
             }
-        }
-        if (action === TouchAction.MOVING_LEFT) {
-            if (!disableTouchAction) {
+
+            if (action === TouchAction.MOVING_LEFT) {
                 rightSidebarSwitchState.toggleRightSidebar?.();
             }
         }

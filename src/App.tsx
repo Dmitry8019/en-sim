@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import classNames from 'classnames';
 
 import { Navbar } from './components/Navbar/Navbar';
 import { Sidebar } from './components/Sidebar/Sidebar';
@@ -20,7 +21,7 @@ function App() {
     };
 
     return (
-        <div className={`app ${theme}`}>
+        <div className={classNames('app', theme)}>
             <Navbar onTheme={handleTheme} theme={theme} />
             <div className='content-page'>
                 <Sidebar />

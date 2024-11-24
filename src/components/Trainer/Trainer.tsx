@@ -188,24 +188,20 @@ export const Trainer = (props: TrainerProps) => {
                             <Icon Svg={VolumeIcon} />
                         </Button>
                     </Settings>
-                    {!window.matchMedia('(max-width: 710px)').matches && (
-                        <>
-                            <Button
-                                onClick={() => handleTextAction(TouchAction.MOVING_RIGHT)}
-                                theme={ThemeButton.CLEAR}
-                                className={styles.button}
-                            >
-                                Prev
-                            </Button>
-                            <Button
-                                onClick={() => handleTextAction(TouchAction.MOVING_LEFT)}
-                                theme={ThemeButton.CLEAR}
-                                className={styles.button}
-                            >
-                                Next
-                            </Button>
-                        </>
-                    )}
+                    <Button
+                        onClick={() => handleTextAction(TouchAction.MOVING_RIGHT)}
+                        theme={ThemeButton.CLEAR}
+                        className={classNames(styles.button, styles.hideButton)}
+                    >
+                        Prev
+                    </Button>
+                    <Button
+                        onClick={() => handleTextAction(TouchAction.MOVING_LEFT)}
+                        theme={ThemeButton.CLEAR}
+                        className={classNames(styles.button, styles.hideButton)}
+                    >
+                        Next
+                    </Button>
                 </div>
             </div>
         </Page>
