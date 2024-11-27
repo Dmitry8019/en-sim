@@ -60,6 +60,14 @@ $widthPanel: 400px;
             box-shadow: 1px 2px 4px var(--home-text-shadow);
         }
 
+        .button {
+            padding: 6px 15px;
+        }
+
+        .active {
+            background: var(--bg-sidebar-active);
+        }
+
         .arrowLeft,
         .arrowRight {
             padding: 3px;
