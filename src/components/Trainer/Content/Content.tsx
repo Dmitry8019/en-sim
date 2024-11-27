@@ -121,7 +121,7 @@ export const Content = (props: ContentProps) => {
             </p>
 
             <div className={styles.groupButton}>
-                {transcription && (
+                {onPlayback && (
                     <>
                         <Button theme={ThemeButton.CLEAR} onClick={handleReset}>
                             <Icon Svg={ResetIcon} />

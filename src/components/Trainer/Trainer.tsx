@@ -19,6 +19,8 @@ import { LocationState } from '../TrainerPage/initialData';
 
 import styles from './Trainer.module.scss';
 
+let repetitionCounter = 0;
+
 type Params = {
     id: string;
 };
@@ -40,6 +42,8 @@ export const Trainer = (props: TrainerProps) => {
     const [showRu, setShowRu] = useState<boolean>(state?.selectedOption.ru);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [autoPlay, setAutoPlay] = useState(0);
+    const [delay, setDelay] = useState(1);
     const trainerRef = useRef<HTMLDivElement>(null);
 
     const [selectedLevel, selectedLesson] = id?.split('_') ?? ['A0, 1'];
@@ -61,6 +65,30 @@ export const Trainer = (props: TrainerProps) => {
             },
         );
     };
+
+    useEffect(() => {
+        let timeId = 0;
+
+        if (!isPlaying && autoPlay) {
+            repetitionCounter++;
+            if (repetitionCounter >= autoPlay) {
+                repetitionCounter = 0;
+                timeId = setTimeout(
+                    () => handleTextAction(TouchAction.MOVING_LEFT, true),
+                    delay * 1000,
+                );
+                return;
+            }
+            timeId = setTimeout(
+                () => handleTextAction(TouchAction.START_ACTION, true),
+                delay * 1000,
+            );
+        }
+
+        return () => {
+            clearTimeout(timeId);
+        };
+    }, [isPlaying, autoPlay, delay]);
 
     useEffect(() => {
         if (sentenceStatus === 'idle' && sentences.length > 0 && state.selectedOption.sound) {
@@ -90,7 +118,8 @@ export const Trainer = (props: TrainerProps) => {
         setSentenceIndex(newIndex);
     };
 
-    const handleTextAction = (action: TouchAction) => {
+    const handleTextAction = (action: TouchAction, allowed?: boolean) => {
+        const isAutoPlay = autoPlay && !allowed;
         switch (action) {
             case TouchAction.MOVING_UP: {
                 setShowEn(!showEn);
@@ -101,18 +130,27 @@ export const Trainer = (props: TrainerProps) => {
                 break;
             }
             case TouchAction.MOVING_LEFT: {
+                if (isAutoPlay) {
+                    break;
+                }
                 handleNext();
                 setShowEn(state.selectedOption.en);
                 setShowRu(state.selectedOption.ru);
                 break;
             }
             case TouchAction.MOVING_RIGHT: {
+                if (isAutoPlay) {
+                    break;
+                }
                 handlePrev();
                 setShowEn(state.selectedOption.en);
                 setShowRu(state.selectedOption.ru);
                 break;
             }
             case TouchAction.START_ACTION: {
+                if (isAutoPlay) {
+                    return;
+                }
                 playSound(sentences[sentenceIndex].en);
             }
         }
@@ -143,9 +181,7 @@ export const Trainer = (props: TrainerProps) => {
                     transcription={sentences[sentenceIndex].transcription}
                     showText={showEn}
                     onShowText={() => setShowEn(!showEn)}
-                    onPlayback={(text: string) => {
-                        playSound(text);
-                    }}
+                    onPlayback={autoPlay ? undefined : playSound}
                 />
                 <Content
                     sentence={sentences[sentenceIndex].ru}
@@ -168,6 +204,10 @@ export const Trainer = (props: TrainerProps) => {
                         onShowSettings={() => setShowSettings(false)}
                         showSettings={showSettings}
                         className={styles.wrapperSettings}
+                        autoPlay={autoPlay}
+                        onAutoPlay={setAutoPlay}
+                        delay={delay}
+                        onDelay={setDelay}
                     >
                         <Button
                             theme={ThemeButton.CLEAR}
@@ -178,12 +218,13 @@ export const Trainer = (props: TrainerProps) => {
                         </Button>
                         <Button
                             onClick={() => {
-                                playSound(sentences[sentenceIndex].en);
+                                handleTextAction(TouchAction.START_ACTION);
                             }}
                             theme={ThemeButton.CLEAR}
                             className={classNames(styles.button, {
                                 [styles.buttonActive]: isPlaying,
                             })}
+                            disabled={Boolean(autoPlay)}
                         >
                             <Icon Svg={VolumeIcon} />
                         </Button>
@@ -192,6 +233,7 @@ export const Trainer = (props: TrainerProps) => {
                         onClick={() => handleTextAction(TouchAction.MOVING_RIGHT)}
                         theme={ThemeButton.CLEAR}
                         className={classNames(styles.button, styles.hideButton)}
+                        disabled={Boolean(autoPlay)}
                     >
                         Prev
                     </Button>
@@ -199,6 +241,7 @@ export const Trainer = (props: TrainerProps) => {
                         onClick={() => handleTextAction(TouchAction.MOVING_LEFT)}
                         theme={ThemeButton.CLEAR}
                         className={classNames(styles.button, styles.hideButton)}
+                        disabled={Boolean(autoPlay)}
                     >
                         Next
                     </Button>

@@ -14,10 +14,23 @@ interface SettingsProps {
     children: ReactNode;
     showSettings: boolean;
     onShowSettings: VoidFunction;
+    autoPlay: number;
+    onAutoPlay: (value: number) => void;
+    delay: number;
+    onDelay: (value: number) => void;
 }
 
 export const Settings = (props: SettingsProps) => {
-    const { className, children, onShowSettings, showSettings } = props;
+    const {
+        className,
+        children,
+        onShowSettings,
+        showSettings,
+        onAutoPlay,
+        autoPlay,
+        delay,
+        onDelay,
+    } = props;
 
     const [activeVoice, setActiveVoice] = useState(store.voiceEnIndex);
     const [rate, setRate] = useState(store.rate);
@@ -74,6 +87,51 @@ export const Settings = (props: SettingsProps) => {
                             </Button>
                         </div>
                     </div>
+
+                    <div className={styles.wrapper}>
+                        <div className={styles.label}>Auto Play</div>
+                        <div className={styles.speed}>
+                            {[1, 2, 3].map((item) => {
+                                return (
+                                    <Button
+                                        className={classNames(styles.button, {
+                                            [styles.active]: item === autoPlay,
+                                        })}
+                                        key={item}
+                                        theme={ThemeButton.CLEAR}
+                                        onClick={() => {
+                                            onAutoPlay(autoPlay === item ? 0 : item);
+                                        }}
+                                    >
+                                        {item}
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className={styles.wrapper}>
+                        <div className={styles.label}>Delay</div>
+                        <div className={styles.speed}>
+                            {[1, 2, 3, 4, 5].map((item) => {
+                                return (
+                                    <Button
+                                        className={classNames(styles.button, {
+                                            [styles.active]: item === delay,
+                                        })}
+                                        key={item}
+                                        theme={ThemeButton.CLEAR}
+                                        onClick={() => {
+                                            onDelay(item);
+                                        }}
+                                    >
+                                        {`${item}s`}
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
                     {store.voicesEn.length > 0 && (
                         <div className={styles.wrapper}>
                             <div className={styles.label}>Voices</div>
