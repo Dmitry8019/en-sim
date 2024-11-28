@@ -116,7 +116,7 @@ export const Settings = (props: SettingsProps) => {
                             {[1, 2, 3, 4, 5].map((item) => {
                                 return (
                                     <Button
-                                        className={classNames(styles.button, {
+                                        className={classNames(styles.delayButton, {
                                             [styles.active]: item === delay,
                                         })}
                                         key={item}
