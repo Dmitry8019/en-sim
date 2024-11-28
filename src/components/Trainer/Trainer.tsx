@@ -20,6 +20,7 @@ import { LocationState } from '../TrainerPage/initialData';
 import styles from './Trainer.module.scss';
 
 let repetitionCounter = 0;
+let wakeLock: WakeLockSentinel | null = null;
 
 type Params = {
     id: string;
@@ -89,6 +90,36 @@ export const Trainer = (props: TrainerProps) => {
             clearTimeout(timeId);
         };
     }, [isPlaying, autoPlay, delay]);
+
+    const requestWakeLock = async () => {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+        } catch (err) {
+            // The wake lock request fails - usually system-related, such as low battery.
+            console.log(err);
+        }
+    };
+
+    const releaseWakeLock = async () => {
+        wakeLock?.release().then(() => {
+            wakeLock = null;
+        });
+    };
+
+    const exitTrainer = async () => {
+        await releaseWakeLock();
+        navigate(getRouteTrainer(), {
+            state: { id, ...state },
+        });
+    };
+
+    useEffect(() => {
+        if (autoPlay) {
+            requestWakeLock();
+        } else {
+            releaseWakeLock();
+        }
+    }, [autoPlay]);
 
     useEffect(() => {
         if (sentenceStatus === 'idle' && sentences.length > 0 && state.selectedOption.sound) {
@@ -191,9 +222,10 @@ export const Trainer = (props: TrainerProps) => {
                 <div className={styles.footer}>
                     <Button
                         onClick={() => {
-                            navigate(getRouteTrainer(), {
-                                state: { id, ...state },
-                            });
+                            // navigate(getRouteTrainer(), {
+                            //     state: { id, ...state },
+                            // });
+                            exitTrainer();
                         }}
                         theme={ThemeButton.CLEAR}
                         className={styles.button}
