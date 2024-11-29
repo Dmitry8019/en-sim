@@ -130,6 +130,7 @@ export const Trainer = (props: TrainerProps) => {
     const handleNext = () => {
         const newIndex = sentenceIndex + 1;
         if (newIndex >= sentences.length) {
+            setAutoPlay(0);
             return;
         }
         if (state.selectedOption.sound) {
@@ -221,12 +222,7 @@ export const Trainer = (props: TrainerProps) => {
                 />
                 <div className={styles.footer}>
                     <Button
-                        onClick={() => {
-                            // navigate(getRouteTrainer(), {
-                            //     state: { id, ...state },
-                            // });
-                            exitTrainer();
-                        }}
+                        onClick={exitTrainer}
                         theme={ThemeButton.CLEAR}
                         className={styles.button}
                     >
