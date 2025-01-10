@@ -21,6 +21,7 @@ interface ContentProps {
 
 export const Content = (props: ContentProps) => {
     const { className, sentence, transcription, showText, onShowText, onPlayback } = props;
+    const sentenceUpperCase = sentence[0].toUpperCase() + sentence.slice(1);
 
     const [isShowTitle, setIsShowTitle] = useState(false);
     const [isEditingMode, setIsEditingMode] = useState(false);
@@ -34,7 +35,7 @@ export const Content = (props: ContentProps) => {
 
     useEffect(() => {
         handleReset();
-    }, [sentence]);
+    }, [sentenceUpperCase]);
 
     const handleSelectedIndexes = (index: number) => {
         if (!isEditingMode) {
@@ -88,8 +89,10 @@ export const Content = (props: ContentProps) => {
             setIsEditingMode(false);
         }
         if (selectedIndexes.length > 0) {
-            const abc = sentence.split(' ');
-            const newAbc = abc.filter((_, index) => selectedIndexes.includes(index)).join(' ');
+            const arrayWords = sentenceUpperCase.split(' ');
+            const newAbc = arrayWords
+                .filter((_, index) => selectedIndexes.includes(index))
+                .join(' ');
             onPlayback?.(newAbc);
         }
     };
@@ -102,7 +105,7 @@ export const Content = (props: ContentProps) => {
             onClick={handleClick}
             tabIndex={0}
         >
-            {sentence.split(' ').map((word, i) => {
+            {sentenceUpperCase.split(' ').map((word, i) => {
                 return (
                     <span
                         key={i}
@@ -141,7 +144,10 @@ export const Content = (props: ContentProps) => {
                         </Button>
                     </>
                 )}
-                <Button theme={ThemeButton.CLEAR} onClick={() => copyToClipBoard(sentence)}>
+                <Button
+                    theme={ThemeButton.CLEAR}
+                    onClick={() => copyToClipBoard(sentenceUpperCase)}
+                >
                     <Icon Svg={CopyIcon} />
                     {isShowTitle && <div className={styles.showCopy}>Copy</div>}
                 </Button>

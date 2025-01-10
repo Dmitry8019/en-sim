@@ -91,7 +91,7 @@ export const Settings = (props: SettingsProps) => {
                     <div className={styles.wrapper}>
                         <div className={styles.label}>Auto Play</div>
                         <div className={styles.speed}>
-                            {[1, 2, 3].map((item) => {
+                            {[1, 2, 3, 4, 5].map((item) => {
                                 return (
                                     <Button
                                         className={classNames(styles.button, {
