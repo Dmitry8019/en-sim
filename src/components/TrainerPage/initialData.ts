@@ -11,7 +11,7 @@ export interface Option {
     ru: boolean;
 }
 
-export const levels = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1'];
+export const levels = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'stories', 'sentences'];
 export const options: Option[] = [
     {
         id: 1,
