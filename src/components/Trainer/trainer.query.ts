@@ -19,7 +19,12 @@ export const useGetSentencesQuery = (lesson: string) => {
         refetchOnWindowFocus: false,
     });
 
-    useMemo(() => sentences?.sort(() => Math.random() - 0.5), [sentences]);
+    useMemo(() => {
+        if (lesson !== 'stories_1') {
+            return sentences?.sort(() => Math.random() - 0.5);
+        }
+        return sentences;
+    }, [lesson, sentences]);
 
     return {
         sentences,
